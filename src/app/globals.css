@@ -1,0 +1,450 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-olive: #5b5e4d;
+  --color-olive-dark: #4a4d3f;
+  --color-olive-light: #6d705e;
+  --color-lime: #d2ff00;
+  --color-lime-dim: #b8e000;
+  --color-cream: #f0ede4;
+  --color-dark: #101400;
+  --color-bg: #5b5e4d;
+  --color-bg-elevated: #4a4d3f;
+  --font-serif: var(--font-libre);
+  --font-body: var(--font-dm-sans);
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+body {
+  background-color: var(--color-olive);
+  color: var(--color-cream);
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+body::-webkit-scrollbar,
+body ::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::selection {
+  background-color: var(--color-lime);
+  color: var(--color-dark);
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(40px);
+  filter: blur(8px);
+}
+
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  --marquee-duration: 40s;
+}
+
+.marquee-content {
+  animation: marquee-left var(--marquee-duration) linear infinite;
+}
+
+.animate-marquee-left {
+  animation: marquee-left 40s linear infinite;
+}
+
+/* ── Photo cards (Lando-style floating gallery) ── */
+
+.photo-caption {
+  position: absolute;
+  top: -1.25rem;
+  left: 0;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-cream) 55%, transparent);
+  white-space: nowrap;
+}
+
+.photo-caption.static {
+  position: static;
+}
+
+.photo-frame {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-olive-dark);
+  box-shadow: 0 24px 60px rgba(16, 20, 0, 0.25);
+}
+
+.photo-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(240, 237, 228, 0.14) 50%,
+    transparent 62%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.85s cubic-bezier(0.65, 0.05, 0, 1);
+  pointer-events: none;
+}
+
+.photo-card:hover .photo-frame::before {
+  transform: translateX(120%);
+}
+
+.photo-card:hover .photo-frame {
+  box-shadow:
+    0 28px 70px rgba(16, 20, 0, 0.35),
+    0 0 40px rgba(210, 255, 0, 0.06);
+}
+
+.photo-desaturated {
+  filter: grayscale(0.85) sepia(0.15) brightness(0.9);
+  opacity: 0.75;
+}
+
+.photo-placeholder {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--color-olive-dark) 80%, black) 0%,
+    var(--color-olive-dark) 50%,
+    color-mix(in srgb, var(--color-olive-light) 40%, transparent) 100%
+  );
+  border: 1px dashed color-mix(in srgb, var(--color-cream) 12%, transparent);
+}
+
+.photo-card {
+  will-change: transform;
+}
+
+/* ── UI elements ── */
+
+.tag-pill {
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--color-cream) 12%, transparent);
+  padding: 0.5rem 1rem;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-cream) 50%, transparent);
+}
+
+.btn-lime {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background: var(--color-lime);
+  padding: 0.625rem 1.25rem;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  transition: transform 0.3s cubic-bezier(0.65, 0.05, 0, 1);
+}
+
+.btn-lime:hover {
+  transform: scale(1.04);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--color-cream) 25%, transparent);
+  padding: 0.75rem 1.75rem;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+  transition:
+    border-color 0.3s,
+    color 0.3s;
+}
+
+.btn-outline:hover {
+  border-color: var(--color-lime);
+  color: var(--color-lime);
+}
+
+.section-divider {
+  border-top: 1px solid color-mix(in srgb, var(--color-cream) 8%, transparent);
+}
+
+.nav-ham-line {
+  display: block;
+  height: 2px;
+  background: var(--color-cream);
+  transition: all 0.4s cubic-bezier(0.65, 0.05, 0, 1);
+}
+
+.project-card {
+  transition: transform 0.5s cubic-bezier(0.65, 0.05, 0, 1);
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+}
+
+/* ── Lobby effects ── */
+
+.next-live-widget {
+  width: 11.5rem;
+  padding: 1rem 1.125rem;
+  border: 1px solid color-mix(in srgb, var(--color-cream) 18%, transparent);
+  border-radius: 0.25rem;
+  background: color-mix(in srgb, var(--color-olive-dark) 55%, transparent);
+  backdrop-filter: blur(8px);
+  transition:
+    border-color 0.4s cubic-bezier(0.65, 0.05, 0, 1),
+    transform 0.4s cubic-bezier(0.65, 0.05, 0, 1);
+}
+
+.next-live-widget:hover {
+  border-color: color-mix(in srgb, var(--color-lime) 40%, transparent);
+  transform: translateY(-2px);
+}
+
+/* ── Cinematic & ambient effects ── */
+
+.custom-cursor-active,
+.custom-cursor-active * {
+  cursor: none !important;
+}
+
+.cursor-root {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+}
+
+@media (pointer: coarse) {
+  .cursor-root {
+    display: none;
+  }
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-lime);
+}
+
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(240, 237, 228, 0.35);
+}
+
+.film-grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 9997;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 0.6s steps(2) infinite;
+}
+
+@keyframes grain-shift {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-3%, -2%);
+  }
+  100% {
+    transform: translate(2%, 3%);
+  }
+}
+
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 45%,
+    transparent 30%,
+    rgba(16, 20, 0, 0.55) 100%
+  );
+}
+
+.portrait-reveal {
+  isolation: isolate;
+}
+
+@media (pointer: fine) {
+  .portrait-reveal {
+    cursor: none;
+  }
+}
+
+.portrait-reveal-card:hover .photo-frame::before {
+  transform: translateX(-120%);
+}
+
+.portrait-reveal-bottom {
+  z-index: 1;
+  background: var(--color-olive-dark);
+}
+
+.portrait-reveal-top {
+  z-index: 2;
+}
+
+.portrait-reveal-canvas {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Section card effects ── */
+
+.music-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.music-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(210, 255, 0, 0.08),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+.music-card:hover::after {
+  opacity: 1;
+}
+
+.moment-frame {
+  transition:
+    transform 0.5s cubic-bezier(0.65, 0.05, 0, 1),
+    box-shadow 0.5s cubic-bezier(0.65, 0.05, 0, 1);
+}
+
+.moment-card:hover .moment-frame {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(16, 20, 0, 0.3);
+}
+
+.moment-inner {
+  transition: transform 0.6s cubic-bezier(0.65, 0.05, 0, 1);
+}
+
+.moment-card:hover .moment-inner {
+  transform: scale(1.05);
+}
+
+/* ── Video banners (Verstappen-style) ── */
+
+.video-banner {
+  border-top: 1px solid color-mix(in srgb, var(--color-cream) 8%, transparent);
+}
+
+.video-banner-media {
+  transform: scale(1.02);
+  transition: transform 1.2s cubic-bezier(0.65, 0.05, 0, 1);
+}
+
+.video-banner:hover .video-banner-media {
+  transform: scale(1.06);
+}
+
+.video-banner-placeholder {
+  background: linear-gradient(
+    160deg,
+    var(--color-olive-dark) 0%,
+    color-mix(in srgb, var(--color-olive) 70%, black) 45%,
+    var(--color-olive-dark) 100%
+  );
+}
+
+.video-banner-overlay {
+  background:
+    linear-gradient(
+      to top,
+      rgba(16, 20, 0, 0.92) 0%,
+      rgba(16, 20, 0, 0.45) 42%,
+      rgba(16, 20, 0, 0.15) 100%
+    ),
+    linear-gradient(
+      to right,
+      rgba(16, 20, 0, 0.55) 0%,
+      transparent 55%
+    );
+}
+
+.video-banner-corner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  width: 5.5rem;
+  height: 5.5rem;
+  background: var(--color-lime);
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+  opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+  .video-banner-corner {
+    width: 7rem;
+    height: 7rem;
+  }
+}
