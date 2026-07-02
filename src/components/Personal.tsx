@@ -51,7 +51,6 @@ export function Personal() {
                 "Lead Vocals",
                 "Lyricist",
                 "Composer",
-                "Photography",
                 "ΛTLΛST",
               ].map((tag) => (
                 <span key={tag} className="tag-pill">
