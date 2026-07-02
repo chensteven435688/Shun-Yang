@@ -8,16 +8,36 @@ type Props = {
   index: number;
 };
 
+function youtubeEmbedUrl(id: string) {
+  const params = new URLSearchParams({
+    controls: "0",
+    autoplay: "1",
+    mute: "1",
+    loop: "1",
+    playlist: id,
+    rel: "0",
+    playsinline: "1",
+    modestbranding: "1",
+    iv_load_policy: "3",
+    disablekb: "1",
+    fs: "0",
+  });
+  return `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`;
+}
+
 export function VideoBanner({ video, index }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
+  const useYoutube = Boolean(video.youtubeId);
 
   useEffect(() => {
+    if (useYoutube || !video.src) return;
+
     const section = sectionRef.current;
     const el = videoRef.current;
-    if (!section || !el || !video.src) return;
+    if (!section || !el) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -35,7 +55,7 @@ export function VideoBanner({ video, index }: Props) {
 
     observer.observe(section);
     return () => observer.disconnect();
-  }, [video.src]);
+  }, [useYoutube, video.src]);
 
   const toggleMute = () => {
     const el = videoRef.current;
@@ -66,18 +86,7 @@ export function VideoBanner({ video, index }: Props) {
       style={{ transitionDelay: `${index * 80}ms` }}
     >
       <div className="video-banner-media absolute inset-0">
-        {video.src ? (
-          <video
-            ref={videoRef}
-            className="h-full w-full object-cover"
-            src={video.src}
-            poster={video.poster}
-            muted
-            loop
-            playsInline
-            preload="metadata"
-          />
-        ) : (
+        {video.placeholder ? (
           <div className="video-banner-placeholder h-full w-full">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(210,255,0,0.12),transparent_55%)]" />
             <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(16,20,0,0.2),rgba(74,77,63,0.95))]" />
@@ -85,7 +94,27 @@ export function VideoBanner({ video, index }: Props) {
               +
             </p>
           </div>
-        )}
+        ) : useYoutube && video.youtubeId ? (
+          <iframe
+            className="video-banner-youtube"
+            src={youtubeEmbedUrl(video.youtubeId)}
+            title={`${video.title} preview`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            loading="lazy"
+          />
+        ) : video.src ? (
+          <video
+            ref={videoRef}
+            className="video-banner-video h-full w-full object-cover"
+            src={video.src}
+            poster={video.poster}
+            muted
+            loop
+            playsInline
+            preload="auto"
+          />
+        ) : null}
       </div>
 
       <div className="video-banner-overlay absolute inset-0" aria-hidden />
@@ -134,7 +163,7 @@ export function VideoBanner({ video, index }: Props) {
                 </a>
               )}
 
-              {video.src && (
+              {!useYoutube && video.src && (
                 <>
                   <button
                     type="button"

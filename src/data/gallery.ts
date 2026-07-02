@@ -14,7 +14,7 @@ export const galleryItems: GalleryItem[] = [
     id: "main",
     caption: "TAIPEI, 2025",
     src: "/hero.png",
-    revealSrc: "/lobby-future.png",
+    revealSrc: "/images/i-thought-we-had-a-future-cover.png",
     depth: 3,
     parallax: 40,
     className:
