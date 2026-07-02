@@ -1,6 +1,13 @@
 import Image from "next/image";
 import { releases } from "@/data/releases";
 
+const intricate = releases.find((release) => release.title === "Intricate");
+
+function listenLabel(release: (typeof releases)[number]) {
+  if (release.spotifyHref) return "Apple Music · Spotify";
+  return "Listen on Apple Music";
+}
+
 export function Music() {
   return (
     <section id="music" className="section-divider px-6 py-24 md:px-10 md:py-32">
@@ -19,14 +26,30 @@ export function Music() {
               <em className="text-lime">Intricate Hearts</em>
             </h2>
           </div>
-          <a
-            href="https://music.apple.com/tw/album/intricate/1787195411"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[11px] uppercase tracking-[0.2em] text-cream/40 transition-colors hover:text-lime"
-          >
-            Intricate on Apple Music →
-          </a>
+          <div className="flex flex-col items-start gap-2 sm:items-end">
+            {intricate && (
+              <>
+                <a
+                  href={intricate.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] uppercase tracking-[0.2em] text-cream/40 transition-colors hover:text-lime"
+                >
+                  Intricate on Apple Music →
+                </a>
+                {intricate.spotifyHref && (
+                  <a
+                    href={intricate.spotifyHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] uppercase tracking-[0.2em] text-cream/40 transition-colors hover:text-lime"
+                  >
+                    Intricate on Spotify →
+                  </a>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2">
@@ -65,7 +88,7 @@ export function Music() {
                       </h3>
                       <p className="mt-1 text-sm text-cream/40">{release.subtitle}</p>
                       <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-cream/35">
-                        Listen on Apple Music
+                        {listenLabel(release)}
                       </p>
                     </div>
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-cream/15 transition-colors group-hover:border-lime group-hover:bg-lime group-hover:text-dark">
