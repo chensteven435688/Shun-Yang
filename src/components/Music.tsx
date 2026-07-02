@@ -71,8 +71,9 @@ export function Music() {
                   <div className="music-card-cover relative aspect-square w-full md:aspect-auto md:h-full md:min-h-[140px]">
                     <Image
                       src={release.cover}
-                      alt={`${release.title} single cover`}
+                      alt={`${release.title} ${release.type.toLowerCase()} cover`}
                       fill
+                      quality={100}
                       unoptimized
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, 140px"

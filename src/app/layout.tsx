@@ -4,7 +4,6 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { Cursor } from "@/components/effects/Cursor";
-import { FilmGrain } from "@/components/effects/FilmGrain";
 import "./globals.css";
 
 const libre = Libre_Baskerville({
@@ -28,7 +27,7 @@ export const metadata: Metadata = {
     title: "Shun Yang — Vocalist, Lyricist & Creator",
     description:
       "Personal portfolio of Shun Yang — vocalist and lyricist of ΛTLΛST from Taipei.",
-    images: ["/hero.png"],
+    images: ["/hero.jpg"],
   },
 };
 
@@ -41,7 +40,6 @@ export default function RootLayout({
     <html lang="en" className={`${libre.variable} ${dmSans.variable}`}>
       <body>
         <Cursor />
-        <FilmGrain />
         <SmoothScroll>
           <Nav />
           <main>{children}</main>

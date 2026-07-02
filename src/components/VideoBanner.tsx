@@ -85,11 +85,11 @@ export function VideoBanner({ video, index }: Props) {
       className="video-banner group relative min-h-[88vh] overflow-hidden"
       style={{ transitionDelay: `${index * 80}ms` }}
     >
-      <div className="video-banner-media absolute inset-0">
+      <div className="video-banner-media absolute inset-0 bg-olive-dark">
         {video.placeholder ? (
           <div className="video-banner-placeholder h-full w-full">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(210,255,0,0.12),transparent_55%)]" />
-            <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(16,20,0,0.2),rgba(74,77,63,0.95))]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(201,169,110,0.12),transparent_55%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(18,16,14,0.2),rgba(18,16,14,0.95))]" />
             <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-5xl text-cream/10 md:text-7xl">
               +
             </p>
@@ -106,7 +106,7 @@ export function VideoBanner({ video, index }: Props) {
         ) : video.src ? (
           <video
             ref={videoRef}
-            className="video-banner-video h-full w-full object-cover"
+            className="video-banner-video h-full w-full object-contain"
             src={video.src}
             poster={video.poster}
             muted
@@ -118,8 +118,6 @@ export function VideoBanner({ video, index }: Props) {
       </div>
 
       <div className="video-banner-overlay absolute inset-0" aria-hidden />
-
-      <div className="video-banner-corner" aria-hidden />
 
       <div className="video-banner-content relative z-10 flex min-h-[88vh] flex-col justify-end px-6 pb-14 pt-28 md:px-10 md:pb-20">
         <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-lime">

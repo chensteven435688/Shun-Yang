@@ -43,7 +43,7 @@ export function Cursor() {
         hovering = false;
         gsap.to(ring, {
           scale: 1,
-          borderColor: "rgba(240, 237, 228, 0.4)",
+          borderColor: "rgba(232, 226, 214, 0.4)",
           duration: 0.3,
         });
         gsap.to(dot, { scale: 1, duration: 0.25 });

@@ -35,7 +35,7 @@ export function NextLiveWidget() {
       href="#live"
       data-lobby-depth="1"
       data-magnetic
-      className="next-live-widget pointer-events-auto absolute bottom-8 left-6 z-30 hidden md:block"
+      className="next-live-widget pointer-events-auto absolute bottom-8 left-6 z-20 hidden md:block"
     >
       <p className="text-[9px] font-semibold uppercase tracking-[0.35em] text-cream/45">
         Next Live

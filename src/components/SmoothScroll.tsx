@@ -17,6 +17,39 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
 
     lenis.on("scroll", ScrollTrigger.update);
 
+    const scrollToHash = (hash: string, immediate = false) => {
+      if (!hash || hash === "#") {
+        lenis.scrollTo(0, { immediate });
+        return;
+      }
+
+      const target = document.querySelector(hash);
+      if (target instanceof HTMLElement) {
+        lenis.scrollTo(target, { immediate });
+      }
+    };
+
+    const onAnchorClick = (event: MouseEvent) => {
+      const anchor = (event.target as Element | null)?.closest("a[href^='#']");
+      if (!(anchor instanceof HTMLAnchorElement)) return;
+
+      const hash = anchor.getAttribute("href");
+      if (!hash) return;
+
+      event.preventDefault();
+      scrollToHash(hash);
+      window.history.pushState(null, "", hash);
+    };
+
+    document.addEventListener("click", onAnchorClick);
+
+    if (window.location.hash) {
+      requestAnimationFrame(() => scrollToHash(window.location.hash, true));
+    }
+
+    const onPopState = () => scrollToHash(window.location.hash, true);
+    window.addEventListener("popstate", onPopState);
+
     const raf = (time: number) => {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -28,7 +61,6 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       gsap.to(el, {
         opacity: 1,
         y: 0,
-        filter: "blur(0px)",
         duration: 1.1,
         ease: "power4.out",
         scrollTrigger: {
@@ -53,6 +85,8 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     }
 
     return () => {
+      document.removeEventListener("click", onAnchorClick);
+      window.removeEventListener("popstate", onPopState);
       lenis.destroy();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
