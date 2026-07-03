@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 
 const links = [
-  { label: "About", href: "#about" },
-  { label: "Videos", href: "#videos" },
-  { label: "Music", href: "#music" },
-  { label: "Moments", href: "#moments" },
-  { label: "Live", href: "#live" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", href: "/#about" },
+  { label: "Videos", href: "/#videos" },
+  { label: "Music", href: "/music" },
+  { label: "Moments", href: "/#moments" },
+  { label: "Live", href: "/#live" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export function Nav() {
@@ -26,7 +26,7 @@ export function Nav() {
       <header className="pointer-events-none fixed top-0 left-0 right-0 z-50 px-6 py-6 md:px-10 md:py-8">
         <nav className="flex items-start justify-between">
           <a
-            href="#"
+            href="/"
             data-magnetic
             className="pointer-events-auto font-serif text-xl leading-[0.95] tracking-wide text-cream md:text-2xl"
           >
@@ -36,7 +36,7 @@ export function Nav() {
           </a>
 
           <div className="pointer-events-auto flex items-center gap-3">
-            <a href="#music" data-magnetic className="btn-lime">
+            <a href="/music" data-magnetic className="btn-lime">
               <svg
                 viewBox="0 0 24 24"
                 className="h-4 w-4 fill-current"

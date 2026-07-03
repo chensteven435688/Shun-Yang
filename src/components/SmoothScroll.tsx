@@ -30,15 +30,21 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     };
 
     const onAnchorClick = (event: MouseEvent) => {
-      const anchor = (event.target as Element | null)?.closest("a[href^='#']");
+      const anchor = (event.target as Element | null)?.closest("a[href*='#']");
       if (!(anchor instanceof HTMLAnchorElement)) return;
 
-      const hash = anchor.getAttribute("href");
+      const href = anchor.getAttribute("href");
+      if (!href || href === "#") return;
+
+      const url = new URL(href, window.location.origin);
+      const hash = url.hash;
       if (!hash) return;
+
+      if (url.pathname !== window.location.pathname) return;
 
       event.preventDefault();
       scrollToHash(hash);
-      window.history.pushState(null, "", hash);
+      window.history.pushState(null, "", `${url.pathname}${hash}`);
     };
 
     document.addEventListener("click", onAnchorClick);

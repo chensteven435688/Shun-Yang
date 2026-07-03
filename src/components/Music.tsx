@@ -8,9 +8,18 @@ function listenLabel(release: (typeof releases)[number]) {
   return "Listen on Apple Music";
 }
 
-export function Music() {
+type Props = {
+  standalone?: boolean;
+};
+
+export function Music({ standalone = false }: Props) {
   return (
-    <section id="music" className="section-divider px-6 py-24 md:px-10 md:py-32">
+    <section
+      id={standalone ? undefined : "music"}
+      className={`px-6 py-24 md:px-10 md:py-32 ${
+        standalone ? "pt-32 md:pt-36" : "section-divider"
+      }`}
+    >
       <div className="mx-auto max-w-7xl">
         <div
           className="mb-12 flex flex-col gap-6 md:mb-16 md:flex-row md:items-end md:justify-between"
