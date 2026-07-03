@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { gsap } from "gsap";
 
 const links = [
@@ -134,7 +135,7 @@ export function Nav() {
     <>
       <header className="pointer-events-none fixed top-0 left-0 right-0 z-50 px-6 py-6 md:px-10 md:py-8">
         <nav className="flex items-start justify-between">
-          <a
+          <Link
             href="/"
             data-magnetic
             className="pointer-events-auto font-serif text-xl leading-[0.95] tracking-wide text-cream md:text-2xl"
@@ -142,10 +143,10 @@ export function Nav() {
             SHUN
             <br />
             YANG
-          </a>
+          </Link>
 
           <div className="pointer-events-auto flex items-center gap-3">
-            <a href="/music" data-magnetic className="btn-lime">
+            <Link href="/music" data-magnetic className="btn-lime">
               <svg
                 viewBox="0 0 24 24"
                 className="h-4 w-4 fill-current"
@@ -154,7 +155,7 @@ export function Nav() {
                 <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
               </svg>
               Music
-            </a>
+            </Link>
 
             <button
               type="button"
@@ -205,7 +206,7 @@ export function Nav() {
             <ul ref={linksRef} className="nav-menu-links">
               {links.map((link) => (
                 <li key={link.href} data-nav-link>
-                  <a
+                  <Link
                     href={link.href}
                     data-magnetic
                     onClick={() => setMenuOpen(false)}
@@ -214,7 +215,7 @@ export function Nav() {
                     <span className="nav-menu-link-index">{link.index}</span>
                     <span className="nav-menu-link-label">{link.label}</span>
                     <span className="nav-menu-link-line" aria-hidden />
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -226,20 +227,20 @@ export function Nav() {
               <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-lime">
                 Latest Release
               </p>
-              <a
-                href="/music"
+              <Link
+                href="/music/intricate"
                 data-magnetic
                 onClick={() => setMenuOpen(false)}
                 className="group mt-5 block"
               >
-                <div className="relative aspect-square w-52 overflow-hidden rounded-sm border border-cream/10 transition-colors group-hover:border-lime/35">
+                <div className="relative aspect-square w-52 overflow-hidden rounded-sm border border-cream/10 bg-olive-dark transition-colors group-hover:border-lime/35">
                   <Image
                     src="/images/intricate-cover.png"
                     alt="Intricate album cover"
-                    fill
+                    width={208}
+                    height={208}
                     unoptimized
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="208px"
+                    className="block h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
                 <p className="mt-4 font-serif text-3xl text-cream transition-colors group-hover:text-lime">
@@ -249,9 +250,9 @@ export function Nav() {
                   Romantica · Chen An Wang &amp; Shun Yang
                 </p>
                 <p className="mt-4 text-[10px] uppercase tracking-[0.25em] text-cream/35 transition-colors group-hover:text-lime/70">
-                  View full discography →
+                  View all links →
                 </p>
-              </a>
+              </Link>
             </div>
           </div>
 

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 const tape =
-  "ΛTLΛST ◆ INTRICATE — ALBUM OUT NOW ◆ I Thought We Had a Future ◆ Heartbeat ◆ Memories ◆ SHUN YANG ◆ BORN TO LAST ◆";
+  "ΛTLΛST ◆ INTRICATE — ALBUM OUT NOW ◆ SHUN YANG ◆ BORN TO LAST ◆";
 
 export function Marquee() {
   const trackRef = useRef<HTMLDivElement>(null);

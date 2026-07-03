@@ -20,6 +20,7 @@ export const videoBanners: VideoBannerItem[] = [
     subtitle: "From the Romantica days",
     quote: "One of my early music videos — shot back when I was playing at Romantica.",
     src: "/videos/christmas-light-trailer.mp4",
+    poster: "/images/christmas-light-mv-cover.jpg",
     cta: "Watch on YouTube",
     href: "https://www.youtube.com/watch?v=MydkARt5onE",
   },

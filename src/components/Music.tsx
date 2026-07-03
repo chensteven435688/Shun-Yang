@@ -1,9 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import { releases } from "@/data/releases";
 
 const intricate = releases.find((release) => release.title === "Intricate");
 
-function listenLabel(release: (typeof releases)[number]) {
+function cardLabel(release: (typeof releases)[number]) {
+  if (release.linkHub) return "View all links";
   if (release.spotifyHref) return "Apple Music · Spotify";
   return "Listen on Apple Music";
 }
@@ -38,6 +40,12 @@ export function Music({ standalone = false }: Props) {
           <div className="flex flex-col items-start gap-2 sm:items-end">
             {intricate && (
               <>
+                <Link
+                  href="/music/intricate"
+                  className="text-[11px] uppercase tracking-[0.2em] text-cream/40 transition-colors hover:text-lime"
+                >
+                  Intricate links →
+                </Link>
                 <a
                   href={intricate.href}
                   target="_blank"
@@ -62,17 +70,14 @@ export function Music({ standalone = false }: Props) {
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2">
-          {releases.map((release, i) => (
-            <a
-              key={release.title}
-              href={release.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-reveal
-              data-magnetic
-              className="project-card music-card group block overflow-hidden rounded-sm border border-cream/8 bg-olive-dark/40 p-0 transition-colors hover:border-lime/30"
-              style={{ transitionDelay: `${i * 80}ms` }}
-            >
+          {releases.map((release, i) => {
+            const cardHref = release.linkHub ?? release.href;
+            const isInternal = Boolean(release.linkHub);
+
+            const cardClassName =
+              "project-card music-card group block overflow-hidden rounded-sm border border-cream/8 bg-olive-dark/40 p-0 transition-colors hover:border-lime/30";
+            const cardStyle = { transitionDelay: `${i * 80}ms` };
+            const cardContent = (
               <div className="grid md:grid-cols-[auto_1fr] md:items-center">
                 <div className="flex items-center justify-center p-3 md:p-4">
                   <div className="music-card-cover relative aspect-square w-full max-w-[148px] overflow-hidden rounded-sm sm:max-w-[168px] md:size-[124px] md:max-w-none">
@@ -116,7 +121,7 @@ export function Music({ standalone = false }: Props) {
                     </p>
                     {release.cover && (
                       <p className="mt-2 text-[9px] uppercase tracking-[0.15em] text-cream/35">
-                        {listenLabel(release)}
+                        {cardLabel(release)}
                       </p>
                     )}
                   </div>
@@ -131,8 +136,38 @@ export function Music({ standalone = false }: Props) {
                   </div>
                 </div>
               </div>
+            );
+
+            if (isInternal) {
+              return (
+                <Link
+                  key={release.title}
+                  href={cardHref}
+                  data-reveal
+                  data-magnetic
+                  className={cardClassName}
+                  style={cardStyle}
+                >
+                  {cardContent}
+                </Link>
+              );
+            }
+
+            return (
+            <a
+              key={release.title}
+              href={cardHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-reveal
+              data-magnetic
+              className={cardClassName}
+              style={cardStyle}
+            >
+              {cardContent}
             </a>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
