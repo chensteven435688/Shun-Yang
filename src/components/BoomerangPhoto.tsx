@@ -6,7 +6,7 @@ type Props = {
 
 export function BoomerangPhoto({ item }: Props) {
   return (
-    <figure className="absolute inset-0 z-0 flex items-end overflow-hidden">
+    <figure className="absolute inset-0 z-0 overflow-hidden">
       <img
         src={item.src}
         alt={item.caption}
@@ -15,7 +15,7 @@ export function BoomerangPhoto({ item }: Props) {
         loading="eager"
         fetchPriority="high"
         decoding="async"
-        className="block h-auto max-h-full w-full"
+        className="block h-full w-full object-cover object-center"
       />
       <figcaption className="photo-caption absolute bottom-8 right-6 z-30 md:right-10">
         {item.caption}
