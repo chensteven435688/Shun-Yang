@@ -56,9 +56,10 @@ export function FloatingGallery() {
             className="font-serif text-lg leading-relaxed text-cream md:text-xl lg:text-2xl"
           >
             It doesn&apos;t matter{" "}
-            <em className="not-italic text-lime">where</em> you start,
-            it&apos;s <em className="not-italic text-lime">how</em> you progress
-            from there.
+            <em className="not-italic text-lime">where</em>{" "}
+            you start, it&apos;s{" "}
+            <em className="not-italic text-lime">how</em>{" "}
+            you progress from there.
           </p>
           <p
             data-hero-signature

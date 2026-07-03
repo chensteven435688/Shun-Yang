@@ -4,6 +4,7 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { Cursor } from "@/components/effects/Cursor";
+import { siteOrigin, siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const libre = Libre_Baskerville({
@@ -19,13 +20,13 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://shunyang.com"),
+  metadataBase: new URL(siteOrigin),
   title: "Shun Yang — Vocalist, Lyricist & Creator",
   description:
     "Personal portfolio of Shun Yang (陳舜揚) — vocalist and lyricist of ΛTLΛST. Music, moments, and everything in between.",
   openGraph: {
     type: "website",
-    url: "https://shunyang.com",
+    url: siteUrl(),
     title: "Shun Yang — Vocalist, Lyricist & Creator",
     description:
       "Personal portfolio of Shun Yang — vocalist and lyricist of ΛTLΛST from Taipei.",
@@ -56,6 +57,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${libre.variable} ${dmSans.variable}`}>
       <body>
+        <noscript>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
         <Cursor />
         <SmoothScroll>
           <Nav />

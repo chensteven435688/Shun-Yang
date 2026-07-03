@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Music } from "@/components/Music";
+import { siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Music — Shun Yang",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
     title: "Music — Shun Yang",
     description:
       "Discography of Shun Yang — Intricate, singles, and releases from Romantica and ΛTLΛST.",
-    url: "https://shunyang.com/music",
+    url: siteUrl("/music"),
   },
 };
 

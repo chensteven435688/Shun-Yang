@@ -7,6 +7,15 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+function normalizePath(path: string) {
+  return path.replace(/\/$/, "") || "/";
+}
+
+function isInViewport(el: HTMLElement) {
+  const rect = el.getBoundingClientRect();
+  return rect.top < window.innerHeight * 0.92 && rect.bottom > 0;
+}
+
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const lenis = new Lenis({
@@ -36,11 +45,13 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       const href = anchor.getAttribute("href");
       if (!href || href === "#") return;
 
-      const url = new URL(href, window.location.origin);
+      const url = new URL(href, window.location.href);
       const hash = url.hash;
       if (!hash) return;
 
-      if (url.pathname !== window.location.pathname) return;
+      if (normalizePath(url.pathname) !== normalizePath(window.location.pathname)) {
+        return;
+      }
 
       event.preventDefault();
       scrollToHash(hash);
@@ -63,8 +74,17 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     requestAnimationFrame(raf);
 
     const reveals = document.querySelectorAll<HTMLElement>("[data-reveal]");
+    const revealed = new WeakSet<HTMLElement>();
 
-    const revealElement = (el: HTMLElement, delay: number) => {
+    const revealElement = (el: HTMLElement, delay: number, immediate = false) => {
+      if (revealed.has(el)) return;
+      revealed.add(el);
+
+      if (immediate) {
+        gsap.set(el, { opacity: 1, y: 0 });
+        return;
+      }
+
       gsap.to(el, {
         opacity: 1,
         y: 0,
@@ -79,16 +99,26 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
 
       ScrollTrigger.create({
         trigger: el,
-        start: "top 88%",
+        start: "top 92%",
         once: true,
         onEnter: () => revealElement(el, delay),
       });
-
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.88 && rect.bottom > 0) {
-        revealElement(el, delay);
-      }
     });
+
+    const revealVisible = () => {
+      ScrollTrigger.refresh();
+      reveals.forEach((el, i) => {
+        if (isInViewport(el)) {
+          revealElement(el, (i % 4) * 0.05, true);
+        }
+      });
+    };
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(revealVisible);
+    });
+
+    window.addEventListener("load", revealVisible);
 
     const scrollIndicator = document.querySelector(".scroll-indicator");
     if (scrollIndicator) {
@@ -105,6 +135,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     return () => {
       document.removeEventListener("click", onAnchorClick);
       window.removeEventListener("popstate", onPopState);
+      window.removeEventListener("load", revealVisible);
       lenis.destroy();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };

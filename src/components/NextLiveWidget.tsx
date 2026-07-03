@@ -32,7 +32,7 @@ function StageIcon() {
 export function NextLiveWidget() {
   return (
     <Link
-      href="#live"
+      href="/#live"
       data-lobby-depth="1"
       data-magnetic
       className="next-live-widget pointer-events-auto absolute bottom-8 left-6 z-20 hidden md:block"
