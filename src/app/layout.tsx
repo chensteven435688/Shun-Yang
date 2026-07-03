@@ -24,10 +24,27 @@ export const metadata: Metadata = {
   description:
     "Personal portfolio of Shun Yang (陳舜揚) — vocalist and lyricist of ΛTLΛST. Music, moments, and everything in between.",
   openGraph: {
+    type: "website",
+    url: "https://shunyang.com",
     title: "Shun Yang — Vocalist, Lyricist & Creator",
     description:
       "Personal portfolio of Shun Yang — vocalist and lyricist of ΛTLΛST from Taipei.",
-    images: ["/hero.jpg"],
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 675,
+        alt: "Shun Yang — Taipei, 2025",
+        type: "image/jpeg",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Shun Yang — Vocalist, Lyricist & Creator",
+    description:
+      "Personal portfolio of Shun Yang — vocalist and lyricist of ΛTLΛST from Taipei.",
+    images: ["/og-image.jpg"],
   },
 };
 
