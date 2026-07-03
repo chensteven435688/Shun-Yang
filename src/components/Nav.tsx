@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { gsap } from "gsap";
+import { assetPath } from "@/lib/assetPath";
 
 const links = [
   { label: "About", href: "/#about", index: "01" },
@@ -188,7 +189,7 @@ export function Nav() {
         <div className="nav-menu-backdrop absolute inset-0" aria-hidden>
           <div className="relative h-full w-full">
             <Image
-              src="/hero.jpg"
+              src={assetPath("/hero.jpg")}
               alt=""
               fill
               unoptimized
@@ -235,7 +236,7 @@ export function Nav() {
               >
                 <div className="relative aspect-square w-52 overflow-hidden rounded-sm border border-cream/10 bg-olive-dark transition-colors group-hover:border-lime/35">
                   <Image
-                    src="/images/intricate-cover.png"
+                    src={assetPath("/images/intricate-cover.png")}
                     alt="Intricate album cover"
                     width={208}
                     height={208}

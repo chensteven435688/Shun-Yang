@@ -52,6 +52,13 @@ body {
   transform: translateY(40px);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes marquee-left {
   from {
     transform: translateX(0);

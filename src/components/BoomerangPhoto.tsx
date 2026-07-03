@@ -1,4 +1,5 @@
 import type { GalleryItem } from "@/data/gallery";
+import { assetPath } from "@/lib/assetPath";
 
 type Props = {
   item: GalleryItem;
@@ -8,7 +9,7 @@ export function BoomerangPhoto({ item }: Props) {
   return (
     <figure className="absolute inset-0 z-0 overflow-hidden">
       <img
-        src={item.src}
+        src={assetPath(item.src)}
         alt={item.caption}
         width={item.width}
         height={item.height}

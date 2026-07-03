@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { releases } from "@/data/releases";
+import { assetPath } from "@/lib/assetPath";
 
 const intricate = releases.find((release) => release.title === "Intricate");
 
@@ -83,7 +84,7 @@ export function Music({ standalone = false }: Props) {
                   <div className="music-card-cover relative aspect-square w-full max-w-[148px] overflow-hidden rounded-sm sm:max-w-[168px] md:size-[124px] md:max-w-none">
                     {release.cover ? (
                       <Image
-                        src={release.cover}
+                        src={assetPath(release.cover)}
                         alt={`${release.title} ${release.type.toLowerCase()} cover`}
                         fill
                         quality={100}

@@ -63,19 +63,31 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     requestAnimationFrame(raf);
 
     const reveals = document.querySelectorAll<HTMLElement>("[data-reveal]");
-    reveals.forEach((el, i) => {
+
+    const revealElement = (el: HTMLElement, delay: number) => {
       gsap.to(el, {
         opacity: 1,
         y: 0,
         duration: 1.1,
         ease: "power4.out",
-        scrollTrigger: {
-          trigger: el,
-          start: "top 88%",
-          toggleActions: "play none none none",
-        },
-        delay: (i % 4) * 0.05,
+        delay,
       });
+    };
+
+    reveals.forEach((el, i) => {
+      const delay = (i % 4) * 0.05;
+
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top 88%",
+        once: true,
+        onEnter: () => revealElement(el, delay),
+      });
+
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.88 && rect.bottom > 0) {
+        revealElement(el, delay);
+      }
     });
 
     const scrollIndicator = document.querySelector(".scroll-indicator");

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { LinkHubItem, LinkHubSocial } from "@/data/intricate-links";
+import { assetPath } from "@/lib/assetPath";
 
 type HubData = {
   title: string;
@@ -60,7 +61,7 @@ export function LinkHub({
         <div className="text-center" data-reveal>
           <div className="mx-auto relative aspect-square w-24 overflow-hidden rounded-full border border-cream/15 shadow-[0_12px_40px_rgba(18,16,14,0.45)]">
             <Image
-              src={hub.cover}
+              src={assetPath(hub.cover)}
               alt={`${hub.title} cover`}
               width={96}
               height={96}
@@ -105,7 +106,7 @@ export function LinkHub({
                 <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-olive-dark">
                   {item.thumbnail ? (
                     <Image
-                      src={item.thumbnail}
+                      src={assetPath(item.thumbnail)}
                       alt=""
                       width={48}
                       height={48}

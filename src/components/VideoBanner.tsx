@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { VideoBannerItem } from "@/data/videos";
+import { assetPath } from "@/lib/assetPath";
 
 type Props = {
   video: VideoBannerItem;
@@ -107,8 +108,8 @@ export function VideoBanner({ video, index }: Props) {
           <video
             ref={videoRef}
             className="video-banner-video h-full w-full object-contain"
-            src={video.src}
-            poster={video.poster}
+            src={assetPath(video.src)}
+            poster={video.poster ? assetPath(video.poster) : undefined}
             muted
             loop
             playsInline
