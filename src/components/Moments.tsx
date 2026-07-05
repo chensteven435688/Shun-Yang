@@ -9,9 +9,14 @@ const moments = [
   { label: "Everyday", caption: "DAILY LIFE" },
 ];
 
-export function Moments() {
+export function Moments({ standalone = false }: { standalone?: boolean }) {
   return (
-    <section id="moments" className="px-6 py-24 md:px-10 md:py-32">
+    <section
+      id={standalone ? undefined : "moments"}
+      className={`px-6 py-24 md:px-10 md:py-32 ${
+        standalone ? "pt-32 md:pt-36" : ""
+      }`}
+    >
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 flex flex-col gap-4 md:mb-16 md:flex-row md:items-end md:justify-between">
           <div data-reveal>

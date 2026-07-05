@@ -10,7 +10,7 @@ const links = [
   { label: "About", href: "/#about", index: "01" },
   { label: "Videos", href: "/#videos", index: "02" },
   { label: "Music", href: "/music", index: "03" },
-  { label: "Moments", href: "/#moments", index: "04" },
+  { label: "Moments", href: "/moments", index: "04" },
   { label: "Live", href: "/#live", index: "05" },
   { label: "Contact", href: "/#contact", index: "06" },
 ];
