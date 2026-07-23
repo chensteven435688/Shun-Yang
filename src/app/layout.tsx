@@ -3,7 +3,6 @@ import { Libre_Baskerville, DM_Sans } from "next/font/google";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import { Cursor } from "@/components/effects/Cursor";
 import { FilmGrain } from "@/components/effects/FilmGrain";
 import { OpeningLoader } from "@/components/loader/OpeningLoader";
 import { MotionProvider } from "@/components/providers/MotionProvider";
@@ -76,7 +75,6 @@ export default function RootLayout({
         <MotionProvider>
           <OpeningLoader />
           <FilmGrain />
-          <Cursor />
           <MagneticController />
           <RouteFade />
           <SmoothScroll>
