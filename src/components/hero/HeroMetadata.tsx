@@ -2,7 +2,6 @@ import Link from "next/link";
 import { nextShow } from "@/data/shows";
 import { lobbyPhoto } from "@/data/gallery";
 import { ProgressiveImage } from "@/components/media/ProgressiveImage";
-import { heroImage } from "@/lib/criticalAssets";
 
 /**
  * Technical metadata rail + editorial portrait panel.
@@ -19,18 +18,14 @@ export function HeroMetadata() {
 
       <figure className="hero-portrait" data-hero-enter="media">
         <ProgressiveImage
-          src={lobbyPhoto.src || heroImage.src}
+          src={lobbyPhoto.src}
           alt={lobbyPhoto.alt ?? "Shun Yang"}
-          width={640}
-          height={800}
+          width={lobbyPhoto.width}
+          height={lobbyPhoto.height}
           aspectRatio="4 / 5"
-          sizes="(max-width: 768px) 42vw, 220px"
-          srcSet={heroImage.srcSetJpg}
-          webpSrcSet={heroImage.srcSetWebp}
-          placeholderSrc={heroImage.placeholder}
-          priority
+          sizes={lobbyPhoto.sizes ?? "(max-width: 768px) 42vw, 220px"}
           className="hero-portrait-image"
-          imgClassName="object-cover object-center"
+          imgClassName="object-cover object-[center_22%]"
           fallbackLabel="Portrait unavailable"
         />
         <figcaption className="hero-portrait-caption">

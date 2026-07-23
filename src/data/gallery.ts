@@ -1,5 +1,3 @@
-import { heroImage } from "@/lib/criticalAssets";
-
 export type GalleryItem = {
   id: string;
   caption: string;
@@ -13,15 +11,13 @@ export type GalleryItem = {
   placeholderSrc?: string;
 };
 
+/** Editorial lobby still used in the hero metadata portrait panel. */
 export const lobbyPhoto: GalleryItem = {
-  id: "main",
+  id: "lobby",
   caption: "TAIPEI, 2025",
-  alt: "Shun Yang in Taipei, 2025",
-  src: heroImage.src,
-  width: heroImage.width,
-  height: heroImage.height,
-  sizes: heroImage.sizes,
-  srcSet: heroImage.srcSetJpg,
-  webpSrcSet: heroImage.srcSetWebp,
-  placeholderSrc: heroImage.placeholder,
+  alt: "Shun Yang in a Taipei lobby, 2025",
+  src: "/lobby-future.png",
+  width: 1024,
+  height: 1024,
+  sizes: "(max-width: 768px) 42vw, 220px",
 };

@@ -1532,8 +1532,39 @@ html[data-reduced-motion="true"] .hero-fallback-ring {
 }
 
 .hero-portrait-image {
+  position: relative;
+  overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--color-cream) 12%, transparent);
-  filter: grayscale(0.35) contrast(1.05);
+  isolation: isolate;
+}
+
+.hero-portrait-image .progressive-image-img[data-loaded="true"] {
+  /* Restrained editorial grade — photo stays readable under technical wash */
+  filter: grayscale(0.28) saturate(0.78) contrast(1.06) brightness(0.82);
+  opacity: 0.92;
+}
+
+.hero-portrait-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--color-lime) 12%, transparent),
+      transparent 42%,
+      color-mix(in srgb, var(--color-void) 38%, transparent)
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      color-mix(in srgb, var(--color-cream) 4%, transparent) 3px,
+      color-mix(in srgb, var(--color-cream) 4%, transparent) 4px
+    );
+  mix-blend-mode: soft-light;
 }
 
 .hero-portrait-caption {

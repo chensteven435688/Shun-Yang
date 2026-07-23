@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ProgressiveImage } from "@/components/media/ProgressiveImage";
-import { lobbyPhoto } from "@/data/gallery";
 import { heroImage } from "@/lib/criticalAssets";
 
 export function Personal() {
@@ -86,8 +85,8 @@ export function Personal() {
 
           <figure data-reveal="media" className="about-portrait">
             <ProgressiveImage
-              src={lobbyPhoto.src || heroImage.src}
-              alt={lobbyPhoto.alt ?? "Shun Yang"}
+              src={heroImage.src}
+              alt="Shun Yang in Taipei, 2025"
               width={480}
               height={600}
               aspectRatio="4 / 5"
@@ -100,7 +99,7 @@ export function Personal() {
               fallbackLabel="Portrait unavailable"
             />
             <figcaption className="about-portrait-caption">
-              {lobbyPhoto.caption}
+              TAIPEI, 2025
             </figcaption>
           </figure>
         </div>
