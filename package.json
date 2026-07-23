@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "optimize:hero": "node scripts/optimize-hero.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",

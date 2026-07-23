@@ -2,13 +2,16 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { useMotionPreference } from "@/components/providers/MotionProvider";
+import { isCoarsePointer } from "@/lib/breakpoints";
 
 export function Cursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+  const { reducedMotion, ready } = useMotionPreference();
 
   useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) return;
+    if (!ready || reducedMotion || isCoarsePointer()) return;
 
     const dot = dotRef.current;
     const ring = ringRef.current;
@@ -35,7 +38,7 @@ export function Cursor() {
         hovering = true;
         gsap.to(ring, {
           scale: 1.6,
-          borderColor: "rgba(210, 255, 0, 0.7)",
+          borderColor: "rgba(196, 165, 116, 0.7)",
           duration: 0.3,
         });
         gsap.to(dot, { scale: 1.2, duration: 0.25 });
@@ -43,7 +46,7 @@ export function Cursor() {
         hovering = false;
         gsap.to(ring, {
           scale: 1,
-          borderColor: "rgba(232, 226, 214, 0.4)",
+          borderColor: "rgba(232, 233, 236, 0.4)",
           duration: 0.3,
         });
         gsap.to(dot, { scale: 1, duration: 0.25 });
@@ -63,7 +66,7 @@ export function Cursor() {
       frameId = requestAnimationFrame(render);
     };
 
-    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("mousedown", onDown);
     window.addEventListener("mouseup", onUp);
     frameId = requestAnimationFrame(render);
@@ -77,7 +80,9 @@ export function Cursor() {
       window.removeEventListener("mouseup", onUp);
       document.body.classList.remove("custom-cursor-active");
     };
-  }, []);
+  }, [ready, reducedMotion]);
+
+  if (!ready || reducedMotion) return null;
 
   return (
     <div className="cursor-root" aria-hidden>

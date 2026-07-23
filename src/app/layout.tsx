@@ -4,6 +4,10 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { Cursor } from "@/components/effects/Cursor";
+import { FilmGrain } from "@/components/effects/FilmGrain";
+import { OpeningLoader } from "@/components/loader/OpeningLoader";
+import { MotionProvider } from "@/components/providers/MotionProvider";
+import { bootScript } from "@/lib/bootScript";
 import { siteOrigin, siteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -56,16 +60,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${libre.variable} ${dmSans.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+      </head>
       <body>
         <noscript>
-          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+          <style>{`
+            [data-reveal]{opacity:1!important;transform:none!important}
+            .opening-loader{display:none!important}
+          `}</style>
         </noscript>
-        <Cursor />
-        <SmoothScroll>
-          <Nav />
-          <main>{children}</main>
-          <Footer />
-        </SmoothScroll>
+        <MotionProvider>
+          <OpeningLoader />
+          <FilmGrain />
+          <Cursor />
+          <SmoothScroll>
+            <Nav />
+            <main>{children}</main>
+            <Footer />
+          </SmoothScroll>
+        </MotionProvider>
       </body>
     </html>
   );

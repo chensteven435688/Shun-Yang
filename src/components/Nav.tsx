@@ -189,10 +189,12 @@ export function Nav() {
         <div className="nav-menu-backdrop absolute inset-0" aria-hidden>
           <div className="relative h-full w-full">
             <Image
-              src={assetPath("/hero.jpg")}
+              src={assetPath("/images/hero/hero-640.jpg")}
               alt=""
               fill
               unoptimized
+              priority={false}
+              loading="lazy"
               className="object-cover object-center opacity-[0.18] blur-2xl saturate-[0.85]"
               sizes="100vw"
             />
