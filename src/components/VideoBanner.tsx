@@ -82,7 +82,7 @@ export function VideoBanner({ video, index }: Props) {
     <section
       ref={sectionRef}
       id={video.id}
-      data-reveal
+      data-reveal="media"
       className="video-banner group relative min-h-[88vh] overflow-hidden"
       style={{ transitionDelay: `${index * 80}ms` }}
     >
@@ -148,6 +148,7 @@ export function VideoBanner({ video, index }: Props) {
                   href={video.href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-cursor="external"
                   data-magnetic
                   className="btn-lime"
                 >
@@ -166,7 +167,7 @@ export function VideoBanner({ video, index }: Props) {
                 <>
                   <button
                     type="button"
-                    data-magnetic
+                    data-cursor="play"
                     onClick={togglePlay}
                     className="btn-outline"
                   >
@@ -174,7 +175,7 @@ export function VideoBanner({ video, index }: Props) {
                   </button>
                   <button
                     type="button"
-                    data-magnetic
+                    data-cursor="link"
                     onClick={toggleMute}
                     className="btn-outline"
                   >

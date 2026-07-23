@@ -7,6 +7,9 @@ import { Cursor } from "@/components/effects/Cursor";
 import { FilmGrain } from "@/components/effects/FilmGrain";
 import { OpeningLoader } from "@/components/loader/OpeningLoader";
 import { MotionProvider } from "@/components/providers/MotionProvider";
+import { SectionProgress } from "@/components/navigation/SectionProgress";
+import { RouteFade } from "@/components/transitions/RouteFade";
+import { MagneticController } from "@/components/effects/MagneticController";
 import { bootScript } from "@/lib/bootScript";
 import { siteOrigin, siteUrl } from "@/lib/site";
 import "./globals.css";
@@ -74,8 +77,11 @@ export default function RootLayout({
           <OpeningLoader />
           <FilmGrain />
           <Cursor />
+          <MagneticController />
+          <RouteFade />
           <SmoothScroll>
             <Nav />
+            <SectionProgress />
             <main>{children}</main>
             <Footer />
           </SmoothScroll>

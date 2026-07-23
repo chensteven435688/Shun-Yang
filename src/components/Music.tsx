@@ -26,13 +26,19 @@ export function Music({ standalone = false }: Props) {
       <div className="mx-auto max-w-7xl">
         <div
           className="mb-12 flex flex-col gap-6 md:mb-16 md:flex-row md:items-end md:justify-between"
-          data-reveal
+          data-reveal-scope
         >
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-lime">
+            <p
+              data-reveal="meta"
+              className="text-[11px] font-medium uppercase tracking-[0.35em] text-lime"
+            >
               Discography
             </p>
-            <h2 className="mt-3 font-serif text-4xl leading-[1.05] text-cream md:text-6xl">
+            <h2
+              data-reveal="heading"
+              className="mt-3 font-serif text-4xl leading-[1.05] text-cream md:text-6xl"
+            >
               Sound of
               <br />
               <em className="text-lime">Intricate Hearts</em>
@@ -76,7 +82,7 @@ export function Music({ standalone = false }: Props) {
             const isInternal = Boolean(release.linkHub);
 
             const cardClassName =
-              "project-card music-card group block overflow-hidden rounded-sm border border-cream/8 bg-olive-dark/40 p-0 transition-colors hover:border-lime/30";
+              "project-card music-card group block overflow-hidden border border-cream/8 bg-olive-dark/40 p-0 transition-colors hover:border-lime/30";
             const cardStyle = { transitionDelay: `${i * 80}ms` };
             const cardContent = (
               <div className="grid md:grid-cols-[auto_1fr] md:items-center">
@@ -144,8 +150,8 @@ export function Music({ standalone = false }: Props) {
                 <Link
                   key={release.title}
                   href={cardHref}
-                  data-reveal
-                  data-magnetic
+                  data-reveal="media"
+                  data-cursor="view"
                   className={cardClassName}
                   style={cardStyle}
                 >
@@ -160,8 +166,8 @@ export function Music({ standalone = false }: Props) {
               href={cardHref}
               target="_blank"
               rel="noopener noreferrer"
-              data-reveal
-              data-magnetic
+              data-reveal="media"
+              data-cursor="external"
               className={cardClassName}
               style={cardStyle}
             >
