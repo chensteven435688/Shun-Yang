@@ -45,3 +45,8 @@ export const INTENSITY = {
   particles: 1,
   /** Scale down automatically on coarse pointers / reduced motion via consumers */
 } as const;
+
+export const HERO = {
+  entranceDelayFirst: 0.15,
+  entranceDelayRepeat: 0.05,
+} as const;
