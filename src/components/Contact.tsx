@@ -1,45 +1,13 @@
-const personalSocials = [
-  {
-    label: "Instagram",
-    short: "IG",
-    href: "https://www.instagram.com/levi._.c/",
-  },
-  {
-    label: "YouTube",
-    short: "YT",
-    href: "https://www.youtube.com/@levi._.c",
-  },
-];
+import {
+  atlastSite,
+  atlastSocials,
+  contactEmail,
+  personalSocials,
+  type SocialLink,
+} from "@/data/socials";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 
-const atlastSocials = [
-  {
-    label: "Instagram",
-    short: "IG",
-    href: "https://instagram.com/atlast._.official",
-  },
-  {
-    label: "YouTube",
-    short: "YT",
-    href: "https://youtube.com/@ATLAST-BAND-2025",
-  },
-  { label: "X", short: "X", href: "https://x.com/atlast_official" },
-  {
-    label: "Facebook",
-    short: "FB",
-    href: "https://www.facebook.com/profile.php?id=61586367412884",
-  },
-  {
-    label: "Threads",
-    short: "Threads",
-    href: "https://www.threads.com/@atlast._.official",
-  },
-];
-
-function SocialLinks({
-  links,
-}: {
-  links: { label: string; short: string; href: string }[];
-}) {
+function SocialLinks({ links }: { links: SocialLink[] }) {
   return (
     <div className="flex flex-wrap gap-3">
       {links.map((link) => (
@@ -54,6 +22,9 @@ function SocialLinks({
           className="tag-pill transition-colors hover:border-lime/40 hover:text-cream"
         >
           {link.short}
+          <span className="ml-1 opacity-40" aria-hidden>
+            ↗
+          </span>
         </a>
       ))}
     </div>
@@ -64,59 +35,72 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="section-divider px-6 py-24 md:px-10 md:py-32"
+      className="contact-finale section-divider px-6 py-24 md:px-10 md:py-32"
       data-reveal-scope
     >
       <div className="mx-auto max-w-7xl">
-        <div className="border border-cream/8 bg-olive-dark/50 p-10 md:p-16">
-          <p
-            data-reveal="meta"
-            className="text-[11px] font-medium uppercase tracking-[0.35em] text-lime"
-          >
-            Stay Tuned
-          </p>
+        <div className="contact-shell">
+          <div className="contact-lambda" aria-hidden>
+            <svg viewBox="0 0 120 140" fill="none">
+              <path
+                d="M28 118 L60 18 L92 118"
+                stroke="currentColor"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M42 78 H78"
+                stroke="currentColor"
+                strokeWidth="1"
+                strokeLinecap="round"
+                opacity="0.55"
+              />
+            </svg>
+          </div>
 
-          <h2
-            data-reveal="heading"
-            className="mt-4 font-serif text-5xl leading-[0.95] text-cream md:text-7xl"
-          >
-            Get in <em className="text-lime">Touch</em>
-          </h2>
+          <SectionHeader
+            index="06"
+            eyebrow="Collaboration"
+            title={
+              <>
+                Get in <em className="text-lime">Touch</em>
+              </>
+            }
+            description="For music, shows, collaborations, or just to say hello — reach out or follow along."
+          />
 
-          <p
-            data-reveal="text"
-            className="mt-6 max-w-lg text-base leading-relaxed text-cream/55 md:text-lg"
-          >
-            For music, shows, collaborations, or just to say hello — reach out
-            or follow along.
-          </p>
-
-          <div data-reveal="group" className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div data-reveal="group" className="contact-cta mt-10">
             <a
-              href="mailto:info@atlastofficial.com"
-              data-cursor="link"
+              href={`mailto:${contactEmail}`}
               data-magnetic
+              data-cursor="link"
               data-reveal-item
-              className="btn-lime"
+              className="btn-lime contact-email-btn"
             >
               Send Email
             </a>
             <a
-              href="https://atlastofficial.com"
+              href={`mailto:${contactEmail}`}
+              data-cursor="link"
+              data-reveal-item
+              className="contact-email-text"
+            >
+              {contactEmail}
+            </a>
+            <a
+              href={atlastSite}
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="external"
               data-reveal-item
-              className="text-[11px] uppercase tracking-[0.2em] text-cream/40 transition-colors hover:text-lime"
+              className="section-text-link"
             >
-              atlastofficial.com →
+              atlastofficial.com ↗
             </a>
           </div>
 
-          <div
-            data-reveal="group"
-            className="mt-12 space-y-8 border-t border-cream/8 pt-10"
-          >
+          <div data-reveal="group" className="contact-socials mt-14">
             <div data-reveal-item>
               <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-cream/35">
                 Personal
@@ -130,6 +114,10 @@ export function Contact() {
               <SocialLinks links={atlastSocials} />
             </div>
           </div>
+
+          <p data-reveal="meta" className="contact-sign">
+            Shun Yang · 陳舜揚 · Taipei
+          </p>
         </div>
       </div>
     </section>

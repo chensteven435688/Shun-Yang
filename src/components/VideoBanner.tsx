@@ -3,38 +3,25 @@
 import { useEffect, useRef, useState } from "react";
 import type { VideoBannerItem } from "@/data/videos";
 import { assetPath } from "@/lib/assetPath";
+import { ProgressiveImage } from "@/components/media/ProgressiveImage";
+import { useMotionPreference } from "@/components/providers/MotionProvider";
 
 type Props = {
   video: VideoBannerItem;
   index: number;
 };
 
-function youtubeEmbedUrl(id: string) {
-  const params = new URLSearchParams({
-    controls: "0",
-    autoplay: "1",
-    mute: "1",
-    loop: "1",
-    playlist: id,
-    rel: "0",
-    playsinline: "1",
-    modestbranding: "1",
-    iv_load_policy: "3",
-    disablekb: "1",
-    fs: "0",
-  });
-  return `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`;
-}
-
 export function VideoBanner({ video, index }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
-  const useYoutube = Boolean(video.youtubeId);
+  const [wantsPreview, setWantsPreview] = useState(false);
+  const { reducedMotion } = useMotionPreference();
+  const number = String(index + 1).padStart(2, "0");
 
   useEffect(() => {
-    if (useYoutube || !video.src) return;
+    if (!wantsPreview || !video.src || reducedMotion) return;
 
     const section = sectionRef.current;
     const el = videoRef.current;
@@ -56,7 +43,7 @@ export function VideoBanner({ video, index }: Props) {
 
     observer.observe(section);
     return () => observer.disconnect();
-  }, [useYoutube, video.src]);
+  }, [wantsPreview, video.src, reducedMotion]);
 
   const toggleMute = () => {
     const el = videoRef.current;
@@ -67,7 +54,10 @@ export function VideoBanner({ video, index }: Props) {
 
   const togglePlay = () => {
     const el = videoRef.current;
-    if (!el) return;
+    if (!el) {
+      setWantsPreview(true);
+      return;
+    }
     if (el.paused) {
       el.play()
         .then(() => setIsPlaying(true))
@@ -78,65 +68,81 @@ export function VideoBanner({ video, index }: Props) {
     }
   };
 
+  const startPreview = () => {
+    if (video.placeholder) return;
+    setWantsPreview(true);
+  };
+
   return (
-    <section
+    <article
       ref={sectionRef}
       id={video.id}
       data-reveal="media"
-      className="video-banner group relative min-h-[88vh] overflow-hidden"
-      style={{ transitionDelay: `${index * 80}ms` }}
+      className="video-project"
     >
-      <div className="video-banner-media absolute inset-0 bg-olive-dark">
+      <div className="video-project-media">
         {video.placeholder ? (
-          <div className="video-banner-placeholder h-full w-full">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(201,169,110,0.12),transparent_55%)]" />
-            <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(18,16,14,0.2),rgba(18,16,14,0.95))]" />
-            <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-5xl text-cream/10 md:text-7xl">
-              +
-            </p>
+          <div className="video-project-placeholder">
+            <p className="video-project-placeholder-mark">+</p>
           </div>
-        ) : useYoutube && video.youtubeId ? (
-          <iframe
-            className="video-banner-youtube"
-            src={youtubeEmbedUrl(video.youtubeId)}
-            title={`${video.title} preview`}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            loading="lazy"
-          />
-        ) : video.src ? (
-          <video
-            ref={videoRef}
-            className="video-banner-video h-full w-full object-contain"
-            src={assetPath(video.src)}
-            poster={video.poster ? assetPath(video.poster) : undefined}
-            muted
-            loop
-            playsInline
-            preload="auto"
-          />
-        ) : null}
+        ) : (
+          <>
+            {video.poster && !wantsPreview && (
+              <button
+                type="button"
+                className="video-project-poster"
+                onClick={startPreview}
+                data-cursor="play"
+                aria-label={`Play preview of ${video.title}`}
+              >
+                <ProgressiveImage
+                  src={video.poster}
+                  alt=""
+                  width={1920}
+                  height={1080}
+                  aspectRatio="16 / 9"
+                  sizes="100vw"
+                  className="h-full w-full"
+                  fallbackLabel="Preview unavailable"
+                />
+                <span className="video-project-play">Play Preview</span>
+              </button>
+            )}
+
+            {wantsPreview && video.src && (
+              <video
+                ref={videoRef}
+                className="video-project-video"
+                src={assetPath(video.src)}
+                poster={video.poster ? assetPath(video.poster) : undefined}
+                muted
+                loop
+                playsInline
+                preload="metadata"
+              />
+            )}
+          </>
+        )}
+        <div className="video-project-overlay" aria-hidden />
       </div>
 
-      <div className="video-banner-overlay absolute inset-0" aria-hidden />
-
-      <div className="video-banner-content relative z-10 flex min-h-[88vh] flex-col justify-end px-6 pb-14 pt-28 md:px-10 md:pb-20">
-        <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-lime">
-          {video.tag}
+      <div className="video-project-content">
+        <p className="section-eyebrow !text-lime">
+          <span className="section-index">{number}</span>
+          <span className="section-eyebrow-rule" aria-hidden />
+          <span>{video.tag}</span>
         </p>
-        <h2 className="mt-4 max-w-3xl font-serif text-5xl leading-[0.95] text-cream md:text-7xl lg:text-8xl">
-          {video.title}
-        </h2>
-        <p className="mt-3 text-sm uppercase tracking-[0.25em] text-cream/50 md:text-base">
+        <h2 className="video-project-title">{video.title}</h2>
+        <p className="mt-3 text-sm uppercase tracking-[0.25em] text-cream/50">
           {video.subtitle}
         </p>
         {video.quote && (
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-cream/70 md:text-lg">
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-cream/70 md:text-lg">
             {video.quote}
           </p>
         )}
 
-        <div className="mt-10 flex flex-wrap items-center gap-4">
+        <div className="mt-8 flex flex-wrap items-center gap-3">
           {video.placeholder ? (
             <span className="btn-outline pointer-events-none opacity-70">
               {video.cta}
@@ -152,18 +158,10 @@ export function VideoBanner({ video, index }: Props) {
                   data-magnetic
                   className="btn-lime"
                 >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4 fill-current"
-                    aria-hidden
-                  >
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                  {video.cta}
+                  {video.cta} ↗
                 </a>
               )}
-
-              {!useYoutube && video.src && (
+              {video.src && (
                 <>
                   <button
                     type="button"
@@ -171,22 +169,28 @@ export function VideoBanner({ video, index }: Props) {
                     onClick={togglePlay}
                     className="btn-outline"
                   >
-                    {isPlaying ? "Pause Preview" : "Play Preview"}
+                    {!wantsPreview
+                      ? "Load Preview"
+                      : isPlaying
+                        ? "Pause"
+                        : "Play"}
                   </button>
-                  <button
-                    type="button"
-                    data-cursor="link"
-                    onClick={toggleMute}
-                    className="btn-outline"
-                  >
-                    {isMuted ? "Unmute" : "Mute"}
-                  </button>
+                  {wantsPreview && (
+                    <button
+                      type="button"
+                      data-cursor="link"
+                      onClick={toggleMute}
+                      className="btn-outline"
+                    >
+                      {isMuted ? "Unmute" : "Mute"}
+                    </button>
+                  )}
                 </>
               )}
             </>
           )}
         </div>
       </div>
-    </section>
+    </article>
   );
 }

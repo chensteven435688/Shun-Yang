@@ -1,46 +1,56 @@
+import Link from "next/link";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { ProgressiveImage } from "@/components/media/ProgressiveImage";
+import { lobbyPhoto } from "@/data/gallery";
+import { heroImage } from "@/lib/criticalAssets";
+
 export function Personal() {
   return (
-    <section id="about" className="px-6 py-24 md:px-10 md:py-32" data-reveal-scope>
+    <section
+      id="about"
+      className="about-section px-6 py-24 md:px-10 md:py-32"
+      data-reveal-scope
+    >
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-16 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-5">
-            <p
-              data-reveal="meta"
-              className="text-[11px] font-medium uppercase tracking-[0.35em] text-lime"
-            >
-              About Me
-            </p>
-            <h2
-              data-reveal="heading"
-              className="mt-4 font-serif text-4xl leading-[1.1] text-cream md:text-5xl lg:text-6xl"
-            >
+        <SectionHeader
+          index="01"
+          eyebrow="About"
+          title={
+            <>
               Shun Yang
-              <span className="mt-2 block text-lg font-normal text-cream/50 md:text-xl">
+              <span className="mt-2 block text-lg font-normal tracking-normal text-cream/50 md:text-xl">
                 陳舜揚
               </span>
-            </h2>
+            </>
+          }
+        />
+
+        <div className="about-grid mt-14 md:mt-16">
+          <div className="about-statement">
+            <p data-reveal="heading" className="about-lead">
+              Lyrics that feel less composed than remembered.
+            </p>
             <p
               data-reveal="meta"
               className="mt-6 text-sm uppercase tracking-[0.2em] text-cream/40"
             >
-              Vocalist · Lyricist · Creator · Taiwan
+              Vocalist · Lyricist · Creator · Taipei, Taiwan
             </p>
+            <div data-reveal="meta" className="about-meta-rail">
+              <span>EN / 中文</span>
+              <span>ΛTLΛST</span>
+              <span>Romantica</span>
+            </div>
           </div>
 
-          <div className="lg:col-span-7">
-            <p
-              data-reveal="text"
-              className="text-lg leading-relaxed text-cream/75 md:text-xl"
-            >
+          <div className="about-body">
+            <p data-reveal="text" className="text-lg leading-relaxed text-cream/75 md:text-xl">
               I&apos;m a vocalist and lyricist who writes from the inside out —
               lyrics that feel less composed than remembered. Beyond music, this
               is my personal space: moments, projects, and the things I&apos;m
               building along the way.
             </p>
-            <p
-              data-reveal="text"
-              className="mt-6 text-base leading-relaxed text-cream/55 md:text-lg"
-            >
+            <p data-reveal="text" className="mt-6 text-base leading-relaxed text-cream/55 md:text-lg">
               With{" "}
               <a
                 href="https://atlastofficial.com"
@@ -58,7 +68,7 @@ export function Personal() {
 
             <blockquote
               data-reveal="heading"
-              className="mt-10 border-l border-lime/40 pl-6 font-serif text-lg italic leading-relaxed text-cream/70 md:text-xl"
+              className="about-quote mt-10 border-l border-lime/40 pl-6 font-serif text-lg italic leading-relaxed text-cream/70 md:text-xl"
             >
               &ldquo;We don&apos;t make music to be remembered. We make it
               because some things can only be said with a chord and a
@@ -73,7 +83,34 @@ export function Personal() {
               ))}
             </div>
           </div>
+
+          <figure data-reveal="media" className="about-portrait">
+            <ProgressiveImage
+              src={lobbyPhoto.src || heroImage.src}
+              alt={lobbyPhoto.alt ?? "Shun Yang"}
+              width={480}
+              height={600}
+              aspectRatio="4 / 5"
+              sizes="(max-width: 1024px) 40vw, 220px"
+              srcSet={heroImage.srcSetJpg}
+              webpSrcSet={heroImage.srcSetWebp}
+              placeholderSrc={heroImage.placeholder}
+              className="about-portrait-image"
+              imgClassName="object-cover object-center"
+              fallbackLabel="Portrait unavailable"
+            />
+            <figcaption className="about-portrait-caption">
+              {lobbyPhoto.caption}
+            </figcaption>
+          </figure>
         </div>
+
+        <p data-reveal="meta" className="mt-12 text-[10px] uppercase tracking-[0.3em] text-cream/30">
+          Continue to{" "}
+          <Link href="/#featured" data-cursor="link" className="text-cream/50 hover:text-lime">
+            Featured Release
+          </Link>
+        </p>
       </div>
     </section>
   );

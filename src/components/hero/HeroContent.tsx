@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { releases } from "@/data/releases";
+import { getFeaturedRelease } from "@/data/releases";
 
-const latest = releases[0];
+const latest = getFeaturedRelease();
 
 type Props = {
   className?: string;

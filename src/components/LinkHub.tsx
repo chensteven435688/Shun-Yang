@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { LinkHubItem, LinkHubSocial } from "@/data/intricate-links";
 import { assetPath } from "@/lib/assetPath";
+import { ProgressiveImage } from "@/components/media/ProgressiveImage";
 
 type HubData = {
   title: string;
@@ -53,20 +54,23 @@ export function LinkHub({
       <div className="mx-auto w-full max-w-md">
         <Link
           href={backHref}
+          data-cursor="link"
           className="mb-10 inline-flex text-[10px] uppercase tracking-[0.25em] text-cream/40 transition-colors hover:text-lime"
         >
           ← {backLabel}
         </Link>
 
-        <div className="text-center" data-reveal>
-          <div className="mx-auto relative aspect-square w-24 overflow-hidden rounded-full border border-cream/15 shadow-[0_12px_40px_rgba(18,16,14,0.45)]">
-            <Image
-              src={assetPath(hub.cover)}
+        <div className="text-center" data-reveal="media">
+          <div className="mx-auto relative aspect-square w-28 overflow-hidden border border-cream/15">
+            <ProgressiveImage
+              src={hub.cover}
               alt={`${hub.title} cover`}
-              width={96}
-              height={96}
-              unoptimized
-              className="h-full w-full object-cover"
+              width={112}
+              height={112}
+              aspectRatio="1 / 1"
+              sizes="112px"
+              className="h-full w-full"
+              fallbackLabel="Cover"
             />
           </div>
 
@@ -76,7 +80,7 @@ export function LinkHub({
           </p>
           <p className="mt-4 text-sm leading-relaxed text-cream/45">{hub.bio}</p>
 
-          <div className="mt-6 flex items-center justify-center gap-4">
+          <div className="mt-6 flex items-center justify-center gap-3">
             {hub.socials.map((social) => (
               <a
                 key={social.href}
@@ -84,8 +88,8 @@ export function LinkHub({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.label}
-                data-magnetic
-                className="link-hub-social flex h-11 w-11 items-center justify-center rounded-full border border-cream/15 text-cream/70 transition-colors hover:border-lime/40 hover:text-lime"
+                data-cursor="external"
+                className="link-hub-social flex h-11 w-11 items-center justify-center border border-cream/15 text-cream/70 transition-colors hover:border-lime/40 hover:text-lime"
               >
                 <SocialIcon icon={social.icon} />
               </a>
@@ -93,17 +97,17 @@ export function LinkHub({
           </div>
         </div>
 
-        <ul className="mt-10 space-y-3">
-          {hub.links.map((item, i) => (
-            <li key={item.href + item.title} data-reveal style={{ transitionDelay: `${i * 50}ms` }}>
+        <ul className="mt-10 space-y-3" data-reveal="group">
+          {hub.links.map((item) => (
+            <li key={item.href + item.title} data-reveal-item>
               <a
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                data-magnetic
-                className="link-hub-card group flex items-center gap-3 rounded-full border border-cream/10 bg-olive-light/35 px-3 py-3 transition-all hover:border-lime/35 hover:bg-olive-light/55"
+                data-cursor="external"
+                className="link-hub-card group flex items-center gap-3 border border-cream/10 bg-olive-light/35 px-3 py-3 transition-colors hover:border-lime/35 hover:bg-olive-light/55"
               >
-                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-olive-dark">
+                <div className="relative h-12 w-12 shrink-0 overflow-hidden bg-olive-dark">
                   {item.thumbnail ? (
                     <Image
                       src={assetPath(item.thumbnail)}
@@ -140,8 +144,11 @@ export function LinkHub({
                   )}
                 </div>
 
-                <span className="pr-2 text-cream/25 transition-colors group-hover:text-lime/60">
-                  ···
+                <span
+                  className="pr-2 text-[10px] tracking-[0.2em] text-cream/30 transition-colors group-hover:text-lime/70"
+                  aria-hidden
+                >
+                  ↗
                 </span>
               </a>
             </li>

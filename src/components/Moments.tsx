@@ -1,68 +1,110 @@
-"use client";
+import Link from "next/link";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { ProgressiveImage } from "@/components/media/ProgressiveImage";
+import {
+  getMomentPreview,
+  hasRealMomentPhotos,
+  moments,
+  type MomentItem,
+} from "@/data/moments";
 
-const moments = [
-  { label: "On Stage", caption: "LIVE, 2025" },
-  { label: "In Studio", caption: "RECORDING, 2024" },
-  { label: "Behind Scenes", caption: "BTS, 2025" },
-  { label: "Travel", caption: "ON THE ROAD" },
-  { label: "Portraits", caption: "PORTRAITS" },
-  { label: "Everyday", caption: "DAILY LIFE" },
-];
+type Props = {
+  standalone?: boolean;
+};
 
-export function Moments({ standalone = false }: { standalone?: boolean }) {
+function MomentCard({ item }: { item: MomentItem }) {
+  const hasImage = Boolean(item.src);
+
+  return (
+    <article
+      data-reveal-item
+      data-cursor={hasImage ? "view" : undefined}
+      className="moment-card group"
+    >
+      <div className="photo-frame moment-frame aspect-[4/5]">
+        {hasImage && item.src ? (
+          <ProgressiveImage
+            src={item.src}
+            alt={item.alt ?? item.label}
+            width={item.width ?? 800}
+            height={item.height ?? 1000}
+            aspectRatio={`${item.width ?? 4} / ${item.height ?? 5}`}
+            sizes="(max-width: 768px) 90vw, 33vw"
+            className="moment-inner h-full w-full"
+            fallbackLabel="Photo unavailable"
+          />
+        ) : (
+          <div className="photo-placeholder moment-inner">
+            <span className="font-serif text-3xl text-cream/15 transition-transform duration-500 group-hover:scale-110">
+              +
+            </span>
+            <span className="mt-2 text-[10px] uppercase tracking-[0.25em] text-cream/25">
+              {item.label}
+            </span>
+          </div>
+        )}
+      </div>
+      <p className="photo-caption static mt-3 transition-colors group-hover:text-lime/70">
+        {item.caption}
+      </p>
+    </article>
+  );
+}
+
+export function Moments({ standalone = false }: Props) {
+  const items = standalone ? moments : getMomentPreview(4);
+  const hasPhotos = hasRealMomentPhotos();
+
   return (
     <section
       id={standalone ? undefined : "moments"}
       data-reveal-scope
-      className={`px-6 py-24 md:px-10 md:py-32 ${
+      className={`moments-section px-6 py-24 md:px-10 md:py-32 ${
         standalone ? "pt-32 md:pt-36" : ""
       }`}
     >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 flex flex-col gap-4 md:mb-16 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p
-              data-reveal="meta"
-              className="text-[11px] font-medium uppercase tracking-[0.35em] text-lime"
-            >
-              Gallery
-            </p>
-            <h2
-              data-reveal="heading"
-              className="mt-3 font-serif text-4xl text-cream md:text-5xl"
-            >
-              Moments
-            </h2>
-          </div>
-          <p data-reveal="text" className="max-w-sm text-sm text-cream/40">
-            Placeholders for now — swap in your photos anytime.
-          </p>
-        </div>
+        <SectionHeader
+          index="04"
+          eyebrow="Gallery"
+          title="Moments"
+          description={
+            hasPhotos
+              ? "Selected frames from stage, studio, and everyday life."
+              : "An evolving visual archive — categories are ready for photography."
+          }
+          align="split"
+          action={
+            !standalone ? (
+              <Link href="/moments/" data-cursor="view" className="section-text-link">
+                Open Archive →
+              </Link>
+            ) : undefined
+          }
+        />
 
-        <div data-reveal="group" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {moments.map((item) => (
-            <article
-              key={item.label}
-              data-reveal-item
-              data-cursor="view"
-              className="moment-card group"
-            >
-              <div className="photo-frame moment-frame aspect-[4/5] bg-olive-dark/50">
-                <div className="photo-placeholder moment-inner">
-                  <span className="font-serif text-3xl text-cream/15 transition-transform duration-500 group-hover:scale-110">
-                    +
-                  </span>
-                  <span className="mt-2 text-[10px] uppercase tracking-[0.25em] text-cream/25">
-                    {item.label}
-                  </span>
-                </div>
-              </div>
-              <p className="photo-caption static mt-3 transition-colors group-hover:text-lime/70">
-                {item.caption}
-              </p>
-            </article>
+        <div
+          data-reveal="group"
+          className={`moment-grid mt-12 md:mt-16 ${
+            standalone ? "moment-grid--full" : "moment-grid--preview"
+          }`}
+        >
+          {items.map((item) => (
+            <MomentCard key={item.id} item={item} />
           ))}
         </div>
+
+        {standalone && !hasPhotos && (
+          <p
+            data-reveal="text"
+            className="mt-10 max-w-lg text-sm leading-relaxed text-cream/40"
+          >
+            To add photographs, place files in <code className="text-cream/55">public/images/moments/</code>{" "}
+            and update entries in <code className="text-cream/55">src/data/moments.ts</code> with{" "}
+            <code className="text-cream/55">src</code>, <code className="text-cream/55">width</code>,{" "}
+            <code className="text-cream/55">height</code>, and <code className="text-cream/55">alt</code>.
+          </p>
+        )}
       </div>
     </section>
   );

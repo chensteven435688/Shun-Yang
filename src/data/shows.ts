@@ -5,6 +5,11 @@ export type Show = {
   city: string;
   status: string;
   upcoming: boolean;
+  /** Optional future fields — only render when present */
+  ticketUrl?: string;
+  infoUrl?: string;
+  soldOut?: boolean;
+  cancelled?: boolean;
 };
 
 export const shows: Show[] = [
@@ -51,3 +56,6 @@ export const shows: Show[] = [
 ];
 
 export const nextShow = shows.find((s) => s.upcoming) ?? shows[0];
+
+export const upcomingShows = shows.filter((s) => s.upcoming);
+export const pastShows = shows.filter((s) => !s.upcoming);
