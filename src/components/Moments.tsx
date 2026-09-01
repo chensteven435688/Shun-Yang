@@ -59,11 +59,12 @@ export function Moments({ standalone = false }: Props) {
     <section
       id={standalone ? undefined : "moments"}
       data-reveal-scope
-      className={`moments-section px-6 py-24 md:px-10 md:py-32 ${
+      className={`moments-section section-tone--light px-6 py-24 md:px-10 md:py-32 ${
         standalone ? "pt-32 md:pt-36" : ""
       }`}
     >
       <div className="mx-auto max-w-7xl">
+        <div className="ui-card">
         <SectionHeader
           index="04"
           eyebrow="Gallery"
@@ -101,10 +102,11 @@ export function Moments({ standalone = false }: Props) {
           >
             To add photographs, place files in <code className="text-cream/55">public/images/moments/</code>{" "}
             and update entries in <code className="text-cream/55">src/data/moments.ts</code> with{" "}
-            <code className="text-cream/55">src</code>, <code className="text-cream/55">width</code>,{" "}
-            <code className="text-cream/55">height</code>, and <code className="text-cream/55">alt</code>.
+            <code className="text-ink-muted">src</code>, <code className="text-ink-muted">width</code>,{" "}
+            <code className="text-ink-muted">height</code>, and <code className="text-ink-muted">alt</code>.
           </p>
         )}
+        </div>
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ProgressiveImage } from "@/components/media/ProgressiveImage";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { AlbumStack } from "@/components/music/AlbumStack";
 import { getFeaturedRelease, releases, type Release } from "@/data/releases";
 
 type Props = {
@@ -96,18 +97,7 @@ export function Music({ standalone = false }: Props) {
         <article className="music-featured mt-14 md:mt-16" data-reveal-scope>
           <div className="music-featured-grid">
             <div data-reveal="media" className="music-featured-art">
-              {featured.cover && (
-                <ProgressiveImage
-                  src={featured.cover}
-                  alt={`${featured.title} cover`}
-                  width={720}
-                  height={720}
-                  aspectRatio="1 / 1"
-                  sizes="(max-width: 768px) 90vw, 420px"
-                  className="music-featured-image"
-                  fallbackLabel="Cover unavailable"
-                />
-              )}
+              <AlbumStack releases={releases} />
             </div>
             <div className="music-featured-copy">
               <p data-reveal="meta" className="section-eyebrow !mt-0">

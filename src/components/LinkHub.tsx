@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { LinkHubItem, LinkHubSocial } from "@/data/intricate-links";
 import { assetPath } from "@/lib/assetPath";
 import { ProgressiveImage } from "@/components/media/ProgressiveImage";
+import { TrackLinkMotion } from "@/components/music/TrackLinkMotion";
 
 type HubData = {
   title: string;
@@ -97,16 +98,17 @@ export function LinkHub({
           </div>
         </div>
 
-        <ul className="mt-10 space-y-3" data-reveal="group">
-          {hub.links.map((item) => (
-            <li key={item.href + item.title} data-reveal-item>
-              <a
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-cursor="external"
-                className="link-hub-card group flex items-center gap-3 border border-cream/10 bg-olive-light/35 px-3 py-3 transition-colors hover:border-lime/35 hover:bg-olive-light/55"
-              >
+        <TrackLinkMotion links={hub.links}>
+          <ul className="mt-10 space-y-3">
+            {hub.links.map((item) => (
+              <li key={item.href + item.title} data-track-link>
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-cursor="external"
+                  className="link-hub-card group flex items-center gap-3 border border-cream/10 bg-olive-light/35 px-3 py-3 transition-colors hover:border-lime/35 hover:bg-olive-light/55"
+                >
                 <div className="relative h-12 w-12 shrink-0 overflow-hidden bg-olive-dark">
                   {item.thumbnail ? (
                     <Image
@@ -153,7 +155,8 @@ export function LinkHub({
               </a>
             </li>
           ))}
-        </ul>
+          </ul>
+        </TrackLinkMotion>
       </div>
     </section>
   );

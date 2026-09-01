@@ -1,0 +1,33 @@
+---
+description: Figma MCP integration rules for Shun Yang website
+alwaysApply: true
+---
+
+# Figma MCP — Shun Yang Website
+
+When implementing designs or motion from Figma for this project:
+
+## Required flow
+
+1. Run `get_design_context` for the exact node(s) from the Figma URL.
+2. If truncated, run `get_metadata` then re-fetch specific nodes.
+3. Run `get_screenshot` for visual reference before coding.
+4. For animated nodes, also run `get_motion_context` (load the `figma-implement-motion` skill first).
+5. Download assets from the MCP payload; do not substitute placeholders when localhost asset URLs are provided.
+
+## Translate to this codebase (not raw Tailwind output)
+
+- **Framework:** Next.js 16 App Router, React 19, static export (`output: "export"`).
+- **Styling:** Tailwind CSS 4 with tokens in `src/app/globals.css` (`@theme inline`). Use existing token names (`cream`, `lime`, `olive`, `metal`, etc.) — do not hardcode hex values.
+- **Motion:** GSAP 3 + ScrollTrigger + Lenis. Import easing/duration from `@/lib/motion` and reveal presets from `@/lib/reveal`. Do **not** add Framer Motion or motion.dev unless the user explicitly requests it. Adapt Figma motion snippets to GSAP timelines.
+- **3D hero:** Three.js in `src/components/hero/createHeroSculpture.ts` with tokens in `@/lib/hero3d`. Figma 3D exports (video/GIF) are for marketing assets only — live WebGL stays in code.
+- **Components:** Reuse existing patterns in `src/components/` (Nav, Hero, SmoothScroll, MagneticController, Cursor, FilmGrain, OpeningLoader).
+- **Content:** Edit typed data in `src/data/` (`releases.ts`, `videos.ts`, `moments.ts`, `shows.ts`) — not inline in components.
+- **Assets:** Place images in `public/images/`, video in `public/video/`. Use `@/lib/assetPath` for basePath-aware URLs on GitHub Pages.
+- **Accessibility:** Respect `prefers-reduced-motion` — follow patterns in existing hooks (`useDeviceCapability`, reduced-mode hero static fallback).
+
+## Quality bar
+
+- Cinematic, inertial motion — never bouncy. Match the existing motion language.
+- 1:1 visual parity with Figma screenshots before marking complete.
+- Minimal scope — do not refactor unrelated sections.

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import { assetPath } from "@/lib/assetPath";
-import { NAV_LINKS, isHomePath, normalizePathname } from "@/lib/nav";
+import { NAV_LINKS, DESKTOP_NAV_LINKS, isHomePath, normalizePathname } from "@/lib/nav";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useMagnetic } from "@/hooks/useMagnetic";
@@ -36,6 +36,7 @@ export function Nav() {
   const { reducedMotion } = useMotionPreference();
   const activeSection = useActiveSection({ pathname });
   const [menuOpen, setMenuOpen] = useState(false);
+  const [navSolid, setNavSolid] = useState(false);
   const [menuPath, setMenuPath] = useState(pathname);
   if (menuPath !== pathname) {
     setMenuPath(pathname);
@@ -93,6 +94,27 @@ export function Nav() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
+
+  useEffect(() => {
+    if (!isHomePath(pathname)) {
+      setNavSolid(true);
+      return;
+    }
+
+    const hero = document.getElementById("hero");
+    if (!hero) {
+      setNavSolid(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setNavSolid(!entry.isIntersecting),
+      { threshold: 0, rootMargin: "-72px 0px 0px 0px" }
+    );
+
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, [pathname]);
 
   useEffect(() => {
     const menu = menuRef.current;
@@ -179,16 +201,22 @@ export function Nav() {
 
   const closeMenu = () => setMenuOpen(false);
 
+  if (isHomePath(pathname)) {
+    return null;
+  }
+
   return (
     <>
-      <header className="site-header pointer-events-none fixed top-0 left-0 right-0 z-50">
+      <header
+        className={`site-header pointer-events-none fixed top-0 left-0 right-0 z-50 ${navSolid ? "is-solid" : ""}`}
+      >
         <div className="site-header-inner pointer-events-none flex items-start justify-between px-6 py-5 md:px-10 md:py-7">
-          <nav className="flex w-full items-start justify-between" aria-label="Primary">
+          <nav className="flex w-full items-center justify-between" aria-label="Primary">
             <Link
               ref={logoRef}
               href="/"
               data-cursor="link"
-              className="pointer-events-auto font-serif text-xl leading-[0.95] tracking-wide text-cream md:text-2xl"
+              className="nav-logo pointer-events-auto font-serif text-xl leading-[0.95] tracking-wide md:text-2xl"
             >
               <span className="sr-only">Shun Yang — Home</span>
               <span aria-hidden>
@@ -198,12 +226,26 @@ export function Nav() {
               </span>
             </Link>
 
+            <ul className="nav-desktop-links pointer-events-auto">
+              {DESKTOP_NAV_LINKS.map((link) => {
+                const active = linkIsActive(link, pathname, activeSection);
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      data-cursor="link"
+                      aria-current={active ? "page" : undefined}
+                      className={`nav-desktop-link ${active ? "is-active" : ""}`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+
             <div className="pointer-events-auto flex items-center gap-3 md:gap-4">
-              <div className="nav-desktop-meta hidden lg:flex lg:items-center lg:gap-5">
-                <p className="nav-coord text-[9px] uppercase tracking-[0.35em] text-cream/35">
-                  TPE · 25°02′N
-                </p>
-                <span className="nav-divider" aria-hidden />
+              <div className="nav-desktop-meta hidden xl:flex xl:items-center xl:gap-5">
                 {isHomePath(pathname) && activeSection && (
                   <p className="text-[9px] uppercase tracking-[0.3em] text-lime/80">
                     {String(
@@ -226,14 +268,7 @@ export function Nav() {
                 data-cursor="view"
                 className="nav-music-cta"
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-3.5 w-3.5 fill-current"
-                  aria-hidden
-                >
-                  <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
-                </svg>
-                Music
+                Listen
               </Link>
 
               <button

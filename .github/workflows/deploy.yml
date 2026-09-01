@@ -18,8 +18,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_BASE_PATH: /Shun-Yang
-      NEXT_PUBLIC_SITE_URL: https://chensteven435688.github.io/Shun-Yang
+      NEXT_PUBLIC_BASE_PATH: ""
+      NEXT_PUBLIC_SITE_URL: https://www.shunyangofficial.com
     steps:
       - name: Checkout
         uses: actions/checkout@v4

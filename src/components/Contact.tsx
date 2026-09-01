@@ -7,7 +7,13 @@ import {
 } from "@/data/socials";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
-function SocialLinks({ links }: { links: SocialLink[] }) {
+function SocialLinks({
+  links,
+  light = false,
+}: {
+  links: SocialLink[];
+  light?: boolean;
+}) {
   return (
     <div className="flex flex-wrap gap-3">
       {links.map((link) => (
@@ -19,7 +25,11 @@ function SocialLinks({ links }: { links: SocialLink[] }) {
           aria-label={link.label}
           data-cursor="external"
           data-reveal-item
-          className="tag-pill transition-colors hover:border-lime/40 hover:text-cream"
+          className={
+            light
+              ? "tag-pill tag-pill--light transition-colors hover:border-lime-dim/50 hover:text-ink"
+              : "tag-pill transition-colors hover:border-lime/40 hover:text-cream"
+          }
         >
           {link.short}
           <span className="ml-1 opacity-40" aria-hidden>
@@ -31,15 +41,21 @@ function SocialLinks({ links }: { links: SocialLink[] }) {
   );
 }
 
-export function Contact() {
+export function Contact({ standalone = false }: { standalone?: boolean }) {
+  const shellClass = standalone
+    ? "contact-shell contact-shell--light"
+    : "contact-shell";
+
   return (
     <section
-      id="contact"
-      className="contact-finale section-divider px-6 py-24 md:px-10 md:py-32"
+      id={standalone ? undefined : "contact"}
+      className={`contact-finale section-divider px-6 py-24 md:px-10 md:py-32 ${
+        standalone ? "pt-32 md:pt-36 section-tone--light" : ""
+      }`}
       data-reveal-scope
     >
       <div className="mx-auto max-w-7xl">
-        <div className="contact-shell">
+        <div className={shellClass}>
           <div className="contact-lambda" aria-hidden>
             <svg viewBox="0 0 120 140" fill="none">
               <path
@@ -64,7 +80,7 @@ export function Contact() {
             eyebrow="Collaboration"
             title={
               <>
-                Get in <em className="text-lime">Touch</em>
+                Get in <em className={standalone ? "text-lime-dim" : "text-lime"}>Touch</em>
               </>
             }
             description="For music, shows, collaborations, or just to say hello — reach out or follow along."
@@ -102,16 +118,24 @@ export function Contact() {
 
           <div data-reveal="group" className="contact-socials mt-14">
             <div data-reveal-item>
-              <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-cream/35">
+              <p
+                className={`mb-3 text-[10px] uppercase tracking-[0.2em] ${
+                  standalone ? "text-ink-faint" : "text-cream/35"
+                }`}
+              >
                 Personal
               </p>
-              <SocialLinks links={personalSocials} />
+              <SocialLinks links={personalSocials} light={standalone} />
             </div>
             <div data-reveal-item>
-              <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-cream/35">
+              <p
+                className={`mb-3 text-[10px] uppercase tracking-[0.2em] ${
+                  standalone ? "text-ink-faint" : "text-cream/35"
+                }`}
+              >
                 ΛTLΛST
               </p>
-              <SocialLinks links={atlastSocials} />
+              <SocialLinks links={atlastSocials} light={standalone} />
             </div>
           </div>
 

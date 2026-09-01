@@ -3,21 +3,28 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ProgressiveImage } from "@/components/media/ProgressiveImage";
 import { heroImage } from "@/lib/criticalAssets";
 
-export function Personal() {
+type Props = {
+  standalone?: boolean;
+};
+
+export function Personal({ standalone = false }: Props) {
   return (
     <section
-      id="about"
-      className="about-section px-6 py-24 md:px-10 md:py-32"
+      id={standalone ? undefined : "about"}
+      className={`about-section section-tone--light px-6 py-24 md:px-10 md:py-32 ${
+        standalone ? "pt-32 md:pt-36" : ""
+      }`}
       data-reveal-scope
     >
       <div className="mx-auto max-w-7xl">
+        <div className="ui-card">
         <SectionHeader
           index="01"
           eyebrow="About"
           title={
             <>
               Shun Yang
-              <span className="mt-2 block text-lg font-normal tracking-normal text-cream/50 md:text-xl">
+              <span className="mt-2 block text-lg font-normal tracking-normal text-ink-muted md:text-xl">
                 陳舜揚
               </span>
             </>
@@ -104,12 +111,15 @@ export function Personal() {
           </figure>
         </div>
 
-        <p data-reveal="meta" className="mt-12 text-[10px] uppercase tracking-[0.3em] text-cream/30">
-          Continue to{" "}
-          <Link href="/#featured" data-cursor="link" className="text-cream/50 hover:text-lime">
-            Featured Release
-          </Link>
-        </p>
+        {!standalone && (
+          <p data-reveal="meta" className="mt-12 text-[10px] uppercase tracking-[0.3em] text-ink-faint">
+            Continue to{" "}
+            <Link href="/music/" data-cursor="link" className="text-ink-muted hover:text-lime-dim">
+              Music
+            </Link>
+          </p>
+        )}
+        </div>
       </div>
     </section>
   );

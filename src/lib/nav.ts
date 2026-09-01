@@ -16,17 +16,22 @@ export type NavLink = {
   /** Homepage hash target without # */
   sectionId?: HomeSectionId;
   /** Separate app route (not a homepage hash) */
-  route?: "/music" | "/moments";
+  route?: "/about" | "/videos" | "/music" | "/moments" | "/live" | "/contact";
 };
 
 export const NAV_LINKS: NavLink[] = [
-  { label: "About", href: "/#about", index: "01", sectionId: "about" },
-  { label: "Videos", href: "/#videos", index: "02", sectionId: "videos" },
+  { label: "About", href: "/about/", index: "01", route: "/about" },
+  { label: "Videos", href: "/videos/", index: "02", route: "/videos" },
   { label: "Music", href: "/music/", index: "03", route: "/music" },
   { label: "Moments", href: "/moments/", index: "04", route: "/moments" },
-  { label: "Live", href: "/#live", index: "05", sectionId: "live" },
-  { label: "Contact", href: "/#contact", index: "06", sectionId: "contact" },
+  { label: "Live", href: "/live/", index: "05", route: "/live" },
+  { label: "Contact", href: "/contact/", index: "06", route: "/contact" },
 ];
+
+/** Visible in the desktop top bar — clean, minimal set */
+export const DESKTOP_NAV_LINKS = NAV_LINKS.filter((link) =>
+  ["About", "Music", "Live", "Contact"].includes(link.label)
+);
 
 export function normalizePathname(path: string): string {
   const bare = path.replace(/\/$/, "") || "/";

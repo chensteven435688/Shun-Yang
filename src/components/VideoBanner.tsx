@@ -3,25 +3,27 @@
 import { useEffect, useRef, useState } from "react";
 import type { VideoBannerItem } from "@/data/videos";
 import { assetPath } from "@/lib/assetPath";
-import { ProgressiveImage } from "@/components/media/ProgressiveImage";
 import { useMotionPreference } from "@/components/providers/MotionProvider";
 
 type Props = {
   video: VideoBannerItem;
   index: number;
+  total: number;
 };
 
-export function VideoBanner({ video, index }: Props) {
+export function VideoBanner({ video, index, total }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
+  const mediaRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [wantsPreview, setWantsPreview] = useState(false);
+  const [isInView, setIsInView] = useState(false);
   const { reducedMotion } = useMotionPreference();
   const number = String(index + 1).padStart(2, "0");
+  const totalLabel = String(total).padStart(2, "0");
 
   useEffect(() => {
-    if (!wantsPreview || !video.src || reducedMotion) return;
+    if (!video.src || reducedMotion || video.placeholder) return;
 
     const section = sectionRef.current;
     const el = videoRef.current;
@@ -29,6 +31,7 @@ export function VideoBanner({ video, index }: Props) {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
+        setIsInView(entry.isIntersecting);
         if (entry.isIntersecting) {
           el.play()
             .then(() => setIsPlaying(true))
@@ -38,12 +41,19 @@ export function VideoBanner({ video, index }: Props) {
           setIsPlaying(false);
         }
       },
-      { threshold: 0.4 }
+      { threshold: 0.35 }
     );
 
     observer.observe(section);
     return () => observer.disconnect();
-  }, [wantsPreview, video.src, reducedMotion]);
+  }, [video.src, video.placeholder, reducedMotion]);
+
+  useEffect(() => {
+    const media = mediaRef.current;
+    if (!media) return;
+    media.classList.toggle("is-playing", isPlaying && !reducedMotion);
+    media.classList.toggle("is-inview", isInView);
+  }, [isPlaying, isInView, reducedMotion]);
 
   const toggleMute = () => {
     const el = videoRef.current;
@@ -54,10 +64,7 @@ export function VideoBanner({ video, index }: Props) {
 
   const togglePlay = () => {
     const el = videoRef.current;
-    if (!el) {
-      setWantsPreview(true);
-      return;
-    }
+    if (!el) return;
     if (el.paused) {
       el.play()
         .then(() => setIsPlaying(true))
@@ -68,11 +75,6 @@ export function VideoBanner({ video, index }: Props) {
     }
   };
 
-  const startPreview = () => {
-    if (video.placeholder) return;
-    setWantsPreview(true);
-  };
-
   return (
     <article
       ref={sectionRef}
@@ -80,36 +82,17 @@ export function VideoBanner({ video, index }: Props) {
       data-reveal="media"
       className="video-project"
     >
-      <div className="video-project-media">
-        {video.placeholder ? (
-          <div className="video-project-placeholder">
-            <p className="video-project-placeholder-mark">+</p>
-          </div>
-        ) : (
-          <>
-            {video.poster && !wantsPreview && (
-              <button
-                type="button"
-                className="video-project-poster"
-                onClick={startPreview}
-                data-cursor="play"
-                aria-label={`Play preview of ${video.title}`}
-              >
-                <ProgressiveImage
-                  src={video.poster}
-                  alt=""
-                  width={1920}
-                  height={1080}
-                  aspectRatio="16 / 9"
-                  sizes="100vw"
-                  className="h-full w-full"
-                  fallbackLabel="Preview unavailable"
-                />
-                <span className="video-project-play">Play Preview</span>
-              </button>
-            )}
-
-            {wantsPreview && video.src && (
+      <div ref={mediaRef} className="video-project-media">
+        <div className="video-project-media-size" aria-hidden="true" />
+        <div className="video-project-frame">
+          {video.placeholder ? (
+            <div className="video-project-placeholder">
+              <div className="video-project-placeholder-grid" aria-hidden />
+              <p className="video-project-placeholder-mark">+</p>
+              <p className="video-project-placeholder-label">In Production</p>
+            </div>
+          ) : (
+            video.src && (
               <video
                 ref={videoRef}
                 className="video-project-video"
@@ -120,36 +103,84 @@ export function VideoBanner({ video, index }: Props) {
                 playsInline
                 preload="metadata"
               />
+            )
+          )}
+
+          <div className="video-project-overlay" aria-hidden />
+          <div className="video-project-corners" aria-hidden>
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+
+          <div className="video-project-chrome" aria-hidden>
+            <span className="video-project-chrome-index">
+              {number} / {totalLabel}
+            </span>
+            {!video.placeholder && isPlaying && (
+              <span className="video-project-chrome-status">
+                <span className="video-project-chrome-dot" />
+                Now Playing
+              </span>
             )}
-          </>
-        )}
-        <div className="video-project-overlay" aria-hidden />
+          </div>
+
+          {!video.placeholder && video.src && (
+            <div className="video-project-controls">
+              <button
+                type="button"
+                data-cursor="play"
+                onClick={togglePlay}
+                className="video-project-control"
+                aria-label={isPlaying ? "Pause preview" : "Play preview"}
+              >
+                {isPlaying ? "Pause" : "Play"}
+              </button>
+              <button
+                type="button"
+                data-cursor="link"
+                onClick={toggleMute}
+                className="video-project-control"
+                aria-label={isMuted ? "Unmute preview" : "Mute preview"}
+              >
+                {isMuted ? "Unmute" : "Mute"}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="video-project-content">
-        <p className="section-eyebrow !text-lime">
-          <span className="section-index">{number}</span>
-          <span className="section-eyebrow-rule" aria-hidden />
-          <span>{video.tag}</span>
-        </p>
-        <h2 className="video-project-title">{video.title}</h2>
-        <p className="mt-3 text-sm uppercase tracking-[0.25em] text-cream/50">
-          {video.subtitle}
-        </p>
-        {video.quote && (
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-cream/70 md:text-lg">
-            {video.quote}
+        <div className="video-project-content-inner">
+          <p className="section-eyebrow !text-lime">
+            <span className="section-index">{number}</span>
+            <span className="section-eyebrow-rule" aria-hidden />
+            <span>{video.tag}</span>
           </p>
-        )}
+          <h2 className="video-project-title">{video.title}</h2>
+          <div className="video-project-meta">
+            <p className="video-project-subtitle">{video.subtitle}</p>
+            {video.year && (
+              <>
+                <span className="video-project-meta-sep" aria-hidden>
+                  ·
+                </span>
+                <p className="video-project-year">{video.year}</p>
+              </>
+            )}
+          </div>
+          {video.quote && (
+            <p className="video-project-quote">{video.quote}</p>
+          )}
 
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          {video.placeholder ? (
-            <span className="btn-outline pointer-events-none opacity-70">
-              {video.cta}
-            </span>
-          ) : (
-            <>
-              {video.href && (
+          <div className="video-project-actions">
+            {video.placeholder ? (
+              <span className="btn-outline pointer-events-none opacity-70">
+                {video.cta}
+              </span>
+            ) : (
+              video.href && (
                 <a
                   href={video.href}
                   target="_blank"
@@ -160,35 +191,9 @@ export function VideoBanner({ video, index }: Props) {
                 >
                   {video.cta} ↗
                 </a>
-              )}
-              {video.src && (
-                <>
-                  <button
-                    type="button"
-                    data-cursor="play"
-                    onClick={togglePlay}
-                    className="btn-outline"
-                  >
-                    {!wantsPreview
-                      ? "Load Preview"
-                      : isPlaying
-                        ? "Pause"
-                        : "Play"}
-                  </button>
-                  {wantsPreview && (
-                    <button
-                      type="button"
-                      data-cursor="link"
-                      onClick={toggleMute}
-                      className="btn-outline"
-                    >
-                      {isMuted ? "Unmute" : "Mute"}
-                    </button>
-                  )}
-                </>
-              )}
-            </>
-          )}
+              )
+            )}
+          </div>
         </div>
       </div>
     </article>

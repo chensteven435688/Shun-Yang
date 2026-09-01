@@ -1,7 +1,4 @@
 import Link from "next/link";
-import { getFeaturedRelease } from "@/data/releases";
-
-const latest = getFeaturedRelease();
 
 type Props = {
   className?: string;
@@ -14,7 +11,7 @@ export function HeroContent({ className = "" }: Props) {
   return (
     <div className={`hero-content ${className}`.trim()}>
       <p className="hero-kicker" data-hero-enter="meta">
-        Taipei · Taiwan · ΛTLΛST
+        Vocalist · Lyricist · Creator
       </p>
 
       <h1 className="hero-title" data-hero-enter="title">
@@ -23,28 +20,22 @@ export function HeroContent({ className = "" }: Props) {
       </h1>
 
       <p className="hero-roles" data-hero-enter="meta">
-        Vocalist · Lyricist · Creator
+        Taipei · Taiwan · ΛTLΛST
       </p>
 
       <p className="hero-statement" data-hero-enter="text">
-        It doesn&apos;t matter{" "}
-        <em className="hero-em">where</em> you start, it&apos;s{" "}
-        <em className="hero-em">how</em> you progress from there.
+        Lyrics that feel less composed than remembered — raw voice, honest
+        strings, and the space between them.
       </p>
 
-      {latest && (
-        <div className="hero-release" data-hero-enter="meta">
-          <p className="hero-release-label">Latest Release</p>
-          <Link
-            href={latest.linkHub ?? latest.href}
-            data-cursor="view"
-            className="hero-release-link"
-          >
-            <span className="hero-release-title">{latest.title}</span>
-            <span className="hero-release-sub">{latest.subtitle}</span>
-          </Link>
-        </div>
-      )}
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-3" data-hero-enter="meta">
+        <Link href="/music/" data-cursor="view" className="btn-lime">
+          Listen
+        </Link>
+        <Link href="/#about" data-cursor="link" className="btn-outline">
+          About
+        </Link>
+      </div>
     </div>
   );
 }

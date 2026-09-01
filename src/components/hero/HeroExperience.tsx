@@ -5,7 +5,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HeroContent } from "@/components/hero/HeroContent";
-import { HeroMetadata } from "@/components/hero/HeroMetadata";
 import { Hero3DFallback } from "@/components/hero/Hero3DFallback";
 import { useDeviceCapability } from "@/hooks/useDeviceCapability";
 import { useMotionPreference } from "@/components/providers/MotionProvider";
@@ -143,29 +142,25 @@ export function HeroExperience() {
       className="hero-experience"
       aria-label="Shun Yang — Introduction"
     >
-      <div className="hero-experience-inner">
-        <div className="hero-grid">
-          <HeroContent />
-
-          <div className="hero-stage" aria-hidden>
-            <Hero3DFallback />
-            {showCanvas && activeMode && (
-              <div
-                className={`hero-3d-layer ${canvasVisible ? "is-ready" : ""}`}
-                style={{ transitionDuration: `${HERO3D.revealMs}ms` }}
-              >
-                <Hero3D
-                  mode={activeMode}
-                  allowPointer={allowPointer}
-                  onReady={onReady}
-                  onFatal={onFatal}
-                />
-              </div>
-            )}
+      <div className="hero-stage" aria-hidden>
+        <Hero3DFallback />
+        {showCanvas && activeMode && (
+          <div
+            className={`hero-3d-layer ${canvasVisible ? "is-ready" : ""}`}
+            style={{ transitionDuration: `${HERO3D.revealMs}ms` }}
+          >
+            <Hero3D
+              mode={activeMode}
+              allowPointer={allowPointer}
+              onReady={onReady}
+              onFatal={onFatal}
+            />
           </div>
+        )}
+      </div>
 
-          <HeroMetadata />
-        </div>
+      <div className="hero-experience-inner">
+        <HeroContent />
 
         <div className="hero-scroll-cue" data-hero-scroll>
           <span>Scroll</span>

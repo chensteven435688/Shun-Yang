@@ -10,6 +10,7 @@ export type VideoBannerItem = {
   href?: string;
   cta: string;
   placeholder?: boolean;
+  year?: string;
 };
 
 export const videoBanners: VideoBannerItem[] = [
@@ -23,6 +24,7 @@ export const videoBanners: VideoBannerItem[] = [
     poster: "/images/christmas-light-mv-cover.jpg",
     cta: "Watch on YouTube",
     href: "https://www.youtube.com/watch?v=MydkARt5onE",
+    year: "Romantica Era",
   },
   {
     id: "next-video",
@@ -33,5 +35,6 @@ export const videoBanners: VideoBannerItem[] = [
     placeholder: true,
     cta: "Stay Tuned",
     href: "#next-video",
+    year: "2026",
   },
 ];

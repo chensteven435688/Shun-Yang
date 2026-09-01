@@ -1,14 +1,17 @@
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { nextShow, pastShows, upcomingShows } from "@/data/shows";
 
-export function Live() {
+export function Live({ standalone = false }: { standalone?: boolean }) {
   return (
     <section
-      id="live"
-      className="live-section section-divider px-6 py-24 md:px-10 md:py-32"
+      id={standalone ? undefined : "live"}
+      className={`live-section section-tone--light section-divider px-6 py-24 md:px-10 md:py-32 ${
+        standalone ? "pt-32 md:pt-36" : ""
+      }`}
       data-reveal-scope
     >
       <div className="mx-auto max-w-7xl">
+        <div className="ui-card">
         <SectionHeader
           index="05"
           eyebrow="ΛTLΛST · Tour"
@@ -21,13 +24,15 @@ export function Live() {
         />
 
         <div className="live-next mt-14 md:mt-16" data-reveal="group">
-          <p data-reveal-item className="section-eyebrow !text-lime">
+          <p data-reveal-item className="section-eyebrow !text-lime-dim">
             <span className="section-index">Next</span>
             <span className="section-eyebrow-rule" aria-hidden />
             <span>Upcoming</span>
           </p>
+
+          <div className="live-bento">
           {upcomingShows.map((show) => (
-            <div key={show.date + show.venue} data-reveal-item className="live-next-card">
+            <div key={show.date + show.venue} data-reveal-item className="live-bento-card live-bento-card--accent">
               <p className="live-next-date">{show.date}</p>
               <h3 className="live-next-venue">{show.venue}</h3>
               <p className="live-next-detail">{show.detail}</p>
@@ -60,10 +65,11 @@ export function Live() {
             </div>
           ))}
           {!upcomingShows.length && (
-            <p data-reveal-item className="text-cream/45">
+            <p data-reveal-item className="text-ink-muted">
               {nextShow.venue} — {nextShow.status}
             </p>
           )}
+          </div>
         </div>
 
         <div className="live-archive mt-16 md:mt-20">
@@ -94,6 +100,7 @@ export function Live() {
               </li>
             ))}
           </ol>
+        </div>
         </div>
       </div>
     </section>

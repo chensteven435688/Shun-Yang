@@ -4,7 +4,7 @@ export const siteOrigin = (
   process.env.NEXT_PUBLIC_SITE_URL ??
   (basePath
     ? `https://chensteven435688.github.io${basePath}`
-    : "https://shunyang.com")
+    : "https://www.shunyangofficial.com")
 ).replace(/\/$/, "");
 
 export function siteUrl(path = ""): string {

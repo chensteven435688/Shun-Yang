@@ -36,6 +36,7 @@ export function FeaturedRelease() {
       data-reveal-scope
     >
       <div className="mx-auto max-w-7xl">
+        <div className="ui-card ui-card--dark">
         <SectionHeader
           index="02"
           eyebrow="Featured Release"
@@ -132,6 +133,7 @@ export function FeaturedRelease() {
               )}
             </div>
           </div>
+        </div>
         </div>
       </div>
     </section>
