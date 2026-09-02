@@ -20,13 +20,23 @@ function getLenis() {
   return activeLenis;
 }
 
+/**
+ * Wheel scrolling runs on `lerp`, which eases by a fraction of the remaining
+ * distance and so takes noticeably longer the further it has to travel. Anchor
+ * jumps get an explicit duration to stay consistent regardless of distance.
+ */
+const ANCHOR_SCROLL = {
+  duration: 1.1,
+  easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+} as const;
+
 function scrollWithOffset(
   lenis: LenisInstance | null,
   hash: string,
   immediate = false
 ) {
   if (!hash || hash === "#") {
-    if (lenis) lenis.scrollTo(0, { immediate });
+    if (lenis) lenis.scrollTo(0, { immediate, ...ANCHOR_SCROLL });
     else window.scrollTo({ top: 0, behavior: immediate ? "auto" : "smooth" });
     return;
   }
@@ -38,6 +48,7 @@ function scrollWithOffset(
     lenis.scrollTo(target, {
       offset: -HEADER_OFFSET_PX,
       immediate,
+      ...ANCHOR_SCROLL,
     });
     return;
   }
@@ -160,7 +171,8 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let cancelled = false;
-    let rafId = 0;
+    let tick: ((time: number) => void) | undefined;
+    let refreshTimer = 0;
     let indicatorTween: gsap.core.Tween | undefined;
     const revealApi = initReveals(reducedMotion);
     let lenis: LenisInstance | null = null;
@@ -196,19 +208,22 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
 
     if (!reducedMotion) {
       lenis = new Lenis({
-        duration: 1.05,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        lerp: 0.09,
         smoothWheel: true,
         touchMultiplier: 1.4,
+        autoRaf: false,
+        anchors: false,
       });
       activeLenis = lenis;
       lenis.on("scroll", ScrollTrigger.update);
 
-      const raf = (time: number) => {
-        lenis?.raf(time);
-        rafId = requestAnimationFrame(raf);
-      };
-      rafId = requestAnimationFrame(raf);
+      // Drive Lenis from GSAP's ticker rather than a second rAF loop. Two
+      // independent loops resolve in an arbitrary order, so scroll position and
+      // tweens can land a frame apart — which reads as micro-jitter.
+      tick = (time: number) => lenis?.raf(time * 1000);
+      gsap.ticker.add(tick);
+      // Without this GSAP absorbs a long frame and ScrollTrigger jumps to catch up.
+      gsap.ticker.lagSmoothing(0);
 
       const scrollIndicator = document.querySelector(".scroll-indicator");
       if (scrollIndicator) {
@@ -231,9 +246,15 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       });
     }
 
+    // A refresh recomputes every trigger position, and images typically finish
+    // loading in bursts mid-scroll, so collapse those into a single pass.
     const refresh = () => {
       if (cancelled) return;
-      revealApi.refresh();
+      window.clearTimeout(refreshTimer);
+      refreshTimer = window.setTimeout(() => {
+        if (cancelled) return;
+        revealApi.refresh();
+      }, 180);
     };
 
     window.addEventListener("load", refresh);
@@ -260,12 +281,16 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     return () => {
       cancelled = true;
       window.clearTimeout(settle);
+      window.clearTimeout(refreshTimer);
       document.removeEventListener("click", onAnchorClick);
       window.removeEventListener("popstate", onPopState);
       window.removeEventListener("load", refresh);
       document.removeEventListener("load", onMedia, true);
       document.removeEventListener("visibilitychange", onVisibility);
-      cancelAnimationFrame(rafId);
+      if (tick) {
+        gsap.ticker.remove(tick);
+        gsap.ticker.lagSmoothing(500, 33);
+      }
       indicatorTween?.kill();
       revealApi.tweens.forEach((t) => t.kill());
       revealApi.triggers.forEach((t) => t.kill());

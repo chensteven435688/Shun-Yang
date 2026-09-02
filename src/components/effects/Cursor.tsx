@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * Custom pointer companion. Intentionally unmounted — the `data-cursor`
+ * attributes it reads are still in place across the site, so mounting this in
+ * the root layout is all that is needed to switch it back on.
+ */
+
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useMotionPreference } from "@/components/providers/MotionProvider";

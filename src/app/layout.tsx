@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Libre_Baskerville, DM_Sans } from "next/font/google";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Nav } from "@/components/Nav";
@@ -10,6 +11,7 @@ import { SectionProgress } from "@/components/navigation/SectionProgress";
 import { RouteFade } from "@/components/transitions/RouteFade";
 import { MagneticController } from "@/components/effects/MagneticController";
 import { bootScript } from "@/lib/bootScript";
+import { absoluteAssetUrl } from "@/lib/assetPath";
 import { siteOrigin, siteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -38,7 +40,7 @@ export const metadata: Metadata = {
       "Personal portfolio of Shun Yang — vocalist and lyricist of ΛTLΛST from Taipei.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: absoluteAssetUrl("/og-image.jpg"),
         width: 1200,
         height: 675,
         alt: "Shun Yang — Taipei, 2025",
@@ -51,7 +53,7 @@ export const metadata: Metadata = {
     title: "Shun Yang — Vocalist, Lyricist & Creator",
     description:
       "Personal portfolio of Shun Yang — vocalist and lyricist of ΛTLΛST from Taipei.",
-    images: ["/og-image.jpg"],
+    images: [absoluteAssetUrl("/og-image.jpg")],
   },
 };
 
@@ -61,11 +63,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${libre.variable} ${dmSans.variable}`}>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
-      </head>
+    <html
+      lang="en"
+      className={`${libre.variable} ${dmSans.variable}`}
+      suppressHydrationWarning
+    >
       <body>
+        <Script id="sy-boot" strategy="beforeInteractive">
+          {bootScript}
+        </Script>
         <noscript>
           <style>{`
             [data-reveal]{opacity:1!important;transform:none!important}

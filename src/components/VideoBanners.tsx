@@ -20,6 +20,7 @@ export function VideoBanners({ standalone = false }: { standalone?: boolean }) {
       >
         <div className="mx-auto max-w-7xl">
           <SectionHeader
+            as={standalone ? "h1" : "h2"}
             index="03"
             eyebrow="Videos"
             title={

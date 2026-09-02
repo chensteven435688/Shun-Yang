@@ -3,11 +3,15 @@ export type LobbyLink = {
   href: string;
 };
 
-/** Homepage lobby navigation — mirrors zhuohmu.com category list pattern */
+/**
+ * Homepage lobby navigation — mirrors zhuohmu.com category list pattern.
+ * `.home-lobby-link` applies no text-transform, so labels render verbatim and
+ * should stay title case to match NAV_LINKS.
+ */
 export const LOBBY_LINKS: LobbyLink[] = [
   { label: "Music", href: "/music/" },
   { label: "Videos", href: "/videos/" },
   { label: "Moments", href: "/moments/" },
-  { label: "about", href: "/about/" },
-  { label: "contact", href: "/contact/" },
+  { label: "About", href: "/about/" },
+  { label: "Contact", href: "/contact/" },
 ];

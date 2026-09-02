@@ -66,6 +66,7 @@ export function Moments({ standalone = false }: Props) {
       <div className="mx-auto max-w-7xl">
         <div className="ui-card">
         <SectionHeader
+          as={standalone ? "h1" : "h2"}
           index="04"
           eyebrow="Gallery"
           title="Moments"

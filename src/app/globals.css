@@ -280,17 +280,17 @@ html[data-loader="skip"] .opening-loader {
   object-fit: cover;
   object-position: center;
   opacity: 0;
-  filter: blur(12px);
   transform: scale(1.04);
+  /* Blur is intentionally not transitioned — it forces a repaint every frame and
+     images often land mid-scroll. The statically blurred placeholder underneath
+     supplies the focus-pull as this crossfades over it. */
   transition:
     opacity var(--duration-slow) var(--ease-cinematic),
-    filter var(--duration-slow) var(--ease-cinematic),
     transform var(--duration-cinematic) var(--ease-out-expo);
 }
 
 .progressive-image-img[data-loaded="true"] {
   opacity: 1;
-  filter: blur(0);
   transform: scale(1);
 }
 
@@ -770,23 +770,29 @@ html[data-reduced-motion="true"] .cursor-root {
 
 .film-grain {
   position: fixed;
-  inset: -50%;
+  /* Only needs to cover the largest keyframe offset (3%); a bigger box means a
+     bigger rasterized turbulence layer on every page for no visual gain. */
+  inset: -6%;
   z-index: var(--z-grain);
   pointer-events: none;
   opacity: var(--grain-opacity);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation: grain-shift 0.6s steps(2) infinite;
+  /* Promote once so the loop stays on the compositor instead of repainting. */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 @keyframes grain-shift {
   0% {
-    transform: translate(0, 0);
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translate(-3%, -2%);
+    transform: translate3d(-3%, -2%, 0);
   }
   100% {
-    transform: translate(2%, 3%);
+    transform: translate3d(2%, 3%, 0);
   }
 }
 
@@ -1891,6 +1897,12 @@ html[data-reduced-motion="true"] .featured-art {
   gap: 2rem;
 }
 
+.music-featured-art {
+  display: flex;
+  justify-content: center;
+  overflow: visible;
+}
+
 @media (min-width: 900px) {
   .music-featured-grid {
     grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
@@ -1908,6 +1920,27 @@ html[data-reduced-motion="true"] .featured-art {
   font-family: var(--font-serif);
   font-size: clamp(2.2rem, 4vw, 3.5rem);
   color: var(--color-cream);
+}
+
+.music-featured-copy--live {
+  animation: music-featured-copy-in 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes music-featured-copy-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+html[data-reduced-motion="true"] .music-featured-copy--live {
+  animation: none;
 }
 
 .music-archive {
@@ -3274,32 +3307,101 @@ html[data-page="lobby"] .cursor-root {
 
 .album-stack {
   position: relative;
-  min-height: 340px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 380px;
+  perspective: 1400px;
+  touch-action: none;
+  outline: none;
+}
+
+.album-stack:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--color-lime) 45%, transparent);
+  outline-offset: 6px;
+}
+
+.album-stack-rig {
+  position: relative;
+  width: min(92vw, 420px);
+  height: min(72vw, 320px);
+  flex-shrink: 0;
+  transform-style: preserve-3d;
+}
+
+.album-stack-controls {
+  position: absolute;
+  inset: -0.25rem;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.album-stack-nav {
+  pointer-events: auto;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--color-cream) 16%, transparent);
+  background: color-mix(in srgb, var(--color-olive-dark) 88%, transparent);
+  color: color-mix(in srgb, var(--color-cream) 78%, transparent);
+  font-size: 1rem;
+  line-height: 1;
   display: grid;
   place-items: center;
-  perspective: 1200px;
-  touch-action: pan-y;
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease,
+    background 0.25s ease;
+}
+
+.album-stack-nav:hover {
+  border-color: color-mix(in srgb, var(--color-lime) 45%, transparent);
+  color: var(--color-cream);
+}
+
+.album-stack-link--peek {
+  cursor: pointer;
+}
+
+.album-stack-link--peek:hover .album-stack-card {
+  box-shadow:
+    0 28px 60px rgba(0, 0, 0, 0.42),
+    0 0 0 1px color-mix(in srgb, var(--color-lime) 12%, transparent);
 }
 
 @media (min-width: 768px) {
   .album-stack {
-    min-height: 420px;
+    min-height: 440px;
+  }
+
+  .album-stack-rig {
+    width: 420px;
+    height: 320px;
+  }
+
+  .album-stack-stage {
+    width: 320px;
+    height: 320px;
+    margin-left: -160px;
+    margin-top: -160px;
   }
 }
 
 .album-stack-stage {
-  position: relative;
-  width: min(72vw, 280px);
-  height: min(72vw, 280px);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(72vw, 320px);
+  height: min(72vw, 320px);
+  margin-left: calc(min(72vw, 320px) / -2);
+  margin-top: calc(min(72vw, 320px) / -2);
   transform-style: preserve-3d;
   will-change: transform;
-}
-
-@media (min-width: 768px) {
-  .album-stack-stage {
-    width: 320px;
-    height: 320px;
-  }
+  overflow: visible;
 }
 
 .album-stack-link {
@@ -3307,12 +3409,21 @@ html[data-page="lobby"] .cursor-root {
   inset: 0;
   display: block;
   transform-style: preserve-3d;
+  transform-origin: center center;
   text-decoration: none;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  background: none;
+  font: inherit;
+  text-align: inherit;
+  will-change: transform;
 }
 
 .album-stack-card {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  width: 100%;
+  height: 100%;
   transform-style: preserve-3d;
   border-radius: 1.25rem;
   overflow: hidden;
@@ -3320,7 +3431,18 @@ html[data-page="lobby"] .cursor-root {
     0 24px 50px rgba(0, 0, 0, 0.35),
     0 0 0 1px color-mix(in srgb, var(--color-cream) 8%, transparent);
   background: var(--color-olive-dark);
-  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition:
+    box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.album-stack-card-float {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .album-stack-card--hero {

@@ -29,13 +29,20 @@ export function VideoBanner({ video, index, total }: Props) {
     const el = videoRef.current;
     if (!section || !el) return;
 
+    // play() settles asynchronously, so it can resolve after the section unmounts.
+    let cancelled = false;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
         if (entry.isIntersecting) {
           el.play()
-            .then(() => setIsPlaying(true))
-            .catch(() => setIsPlaying(false));
+            .then(() => {
+              if (!cancelled) setIsPlaying(true);
+            })
+            .catch(() => {
+              if (!cancelled) setIsPlaying(false);
+            });
         } else {
           el.pause();
           setIsPlaying(false);
@@ -45,7 +52,10 @@ export function VideoBanner({ video, index, total }: Props) {
     );
 
     observer.observe(section);
-    return () => observer.disconnect();
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+    };
   }, [video.src, video.placeholder, reducedMotion]);
 
   useEffect(() => {

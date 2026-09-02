@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Music } from "@/components/Music";
+import { absoluteAssetUrl } from "@/lib/assetPath";
 import { siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
     description:
       "Discography of Shun Yang — Intricate, singles, and releases from Romantica and ΛTLΛST.",
     url: siteUrl("/music"),
+    images: [absoluteAssetUrl("/images/intricate-cover.png")],
   },
 };
 

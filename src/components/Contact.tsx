@@ -76,6 +76,7 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
           </div>
 
           <SectionHeader
+            as={standalone ? "h1" : "h2"}
             index="06"
             eyebrow="Collaboration"
             title={

@@ -96,15 +96,26 @@ export function Hero3D({ mode, allowPointer, onReady, onFatal }: Props) {
           });
         }
 
-        const onScroll = () => {
+        let scrollFrame = 0;
+        const readScroll = () => {
+          scrollFrame = 0;
           const rect = shell.getBoundingClientRect();
           const view = window.innerHeight || 1;
           const progress = 1 - Math.max(0, Math.min(1, rect.bottom / (view + rect.height)));
           handle?.setScroll(progress);
         };
+
+        // Scroll can fire several times between paints and each rect read forces a
+        // synchronous layout, so coalesce down to one read per frame.
+        const onScroll = () => {
+          if (!scrollFrame) scrollFrame = requestAnimationFrame(readScroll);
+        };
         window.addEventListener("scroll", onScroll, { passive: true });
-        onScroll();
-        cleanups.push(() => window.removeEventListener("scroll", onScroll));
+        readScroll();
+        cleanups.push(() => {
+          window.removeEventListener("scroll", onScroll);
+          if (scrollFrame) cancelAnimationFrame(scrollFrame);
+        });
       } catch {
         if (!cancelled) onFatalRef.current?.();
       }

@@ -1,6 +1,6 @@
 /**
  * Inline boot script — runs before paint to avoid loader/hydration flashes.
- * Kept as a string for Next.js Script / dangerouslySetInnerHTML.
+ * Injected via next/script (beforeInteractive) in the root layout.
  */
 export const bootScript = `
 (function () {

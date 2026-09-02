@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ProgressiveImage } from "@/components/media/ProgressiveImage";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { AlbumStack } from "@/components/music/AlbumStack";
-import { getFeaturedRelease, releases, type Release } from "@/data/releases";
+import { MusicFeatured } from "@/components/music/MusicFeatured";
+import { releases, type Release } from "@/data/releases";
 
 type Props = {
   standalone?: boolean;
@@ -69,8 +69,6 @@ function ArchiveRow({ release, index }: { release: Release; index: number }) {
 }
 
 export function Music({ standalone = false }: Props) {
-  const featured = getFeaturedRelease();
-
   return (
     <section
       id={standalone ? undefined : "music"}
@@ -81,6 +79,7 @@ export function Music({ standalone = false }: Props) {
     >
       <div className="mx-auto max-w-7xl">
         <SectionHeader
+          as={standalone ? "h1" : "h2"}
           index="03"
           eyebrow="Discography"
           title={
@@ -94,69 +93,7 @@ export function Music({ standalone = false }: Props) {
           align="split"
         />
 
-        <article className="music-featured mt-14 md:mt-16" data-reveal-scope>
-          <div className="music-featured-grid">
-            <div data-reveal="media" className="music-featured-art">
-              <AlbumStack releases={releases} />
-            </div>
-            <div className="music-featured-copy">
-              <p data-reveal="meta" className="section-eyebrow !mt-0">
-                <span className="section-index">01</span>
-                <span className="section-eyebrow-rule" aria-hidden />
-                <span>
-                  {featured.type}
-                  {featured.year ? ` · ${featured.year}` : ""}
-                </span>
-              </p>
-              <h3 data-reveal="heading" className="music-featured-title">
-                {featured.title}
-              </h3>
-              <p data-reveal="text" className="mt-3 text-cream/50">
-                {featured.subtitle}
-              </p>
-              {featured.description && (
-                <p data-reveal="text" className="mt-5 max-w-md text-base leading-relaxed text-cream/60">
-                  {featured.description}
-                </p>
-              )}
-              <div data-reveal="group" className="mt-8 flex flex-wrap gap-3">
-                {featured.linkHub && (
-                  <Link
-                    href={featured.linkHub}
-                    data-cursor="view"
-                    data-magnetic
-                    data-reveal-item
-                    className="btn-lime"
-                  >
-                    All Links
-                  </Link>
-                )}
-                <a
-                  href={featured.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-cursor="external"
-                  data-reveal-item
-                  className="btn-outline"
-                >
-                  Apple Music ↗
-                </a>
-                {featured.spotifyHref && (
-                  <a
-                    href={featured.spotifyHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-cursor="external"
-                    data-reveal-item
-                    className="btn-outline"
-                  >
-                    Spotify ↗
-                  </a>
-                )}
-              </div>
-            </div>
-          </div>
-        </article>
+        <MusicFeatured />
 
         <div className="mt-20 md:mt-24">
           <p data-reveal="meta" className="section-eyebrow">

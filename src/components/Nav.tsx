@@ -36,7 +36,9 @@ export function Nav() {
   const { reducedMotion } = useMotionPreference();
   const activeSection = useActiveSection({ pathname });
   const [menuOpen, setMenuOpen] = useState(false);
-  const [navSolid, setNavSolid] = useState(false);
+  const [heroInView, setHeroInView] = useState(false);
+  // Solid by default; only the homepage hero can make the header transparent.
+  const navSolid = !isHomePath(pathname) || !heroInView;
   const [menuPath, setMenuPath] = useState(pathname);
   if (menuPath !== pathname) {
     setMenuPath(pathname);
@@ -96,19 +98,13 @@ export function Nav() {
   }, []);
 
   useEffect(() => {
-    if (!isHomePath(pathname)) {
-      setNavSolid(true);
-      return;
-    }
+    if (!isHomePath(pathname)) return;
 
     const hero = document.getElementById("hero");
-    if (!hero) {
-      setNavSolid(true);
-      return;
-    }
+    if (!hero) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => setNavSolid(!entry.isIntersecting),
+      ([entry]) => setHeroInView(entry.isIntersecting),
       { threshold: 0, rootMargin: "-72px 0px 0px 0px" }
     );
 
@@ -125,78 +121,87 @@ export function Nav() {
 
     const linkItems = linksEl.querySelectorAll<HTMLElement>("[data-nav-link]");
     const backdrop = menu.querySelector(".nav-menu-backdrop");
+    const targets = [menu, backdrop, linksEl, linkItems, feature, footer];
 
-    if (menuOpen) {
-      hasAnimatedRef.current = true;
-      gsap.killTweensOf([menu, backdrop, linksEl, linkItems, feature, footer]);
-      gsap.set(menu, { pointerEvents: "auto", visibility: "visible" });
+    const animate = () => {
+      if (menuOpen) {
+        hasAnimatedRef.current = true;
+        gsap.killTweensOf(targets);
+        gsap.set(menu, { pointerEvents: "auto", visibility: "visible" });
 
-      if (reducedMotion) {
-        gsap.set(menu, { opacity: 1 });
-        gsap.set(linkItems, { opacity: 1, y: 0 });
-        if (feature) gsap.set(feature, { opacity: 1, x: 0 });
-        if (footer) gsap.set(footer, { opacity: 1, y: 0 });
+        if (reducedMotion) {
+          gsap.set(menu, { opacity: 1 });
+          gsap.set(linkItems, { opacity: 1, y: 0 });
+          if (feature) gsap.set(feature, { opacity: 1, x: 0 });
+          if (footer) gsap.set(footer, { opacity: 1, y: 0 });
+          return;
+        }
+
+        gsap.to(menu, { opacity: 1, duration: 0.45, ease: EASING.gsap.out });
+
+        if (backdrop) {
+          gsap.fromTo(
+            backdrop,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.7, ease: EASING.gsap.out }
+          );
+        }
+
+        gsap.fromTo(
+          linkItems,
+          { y: 28, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            stagger: 0.05,
+            ease: EASING.gsap.outStrong,
+            delay: 0.06,
+          }
+        );
+
+        if (feature) {
+          gsap.fromTo(
+            feature,
+            { x: 24, opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.7, ease: EASING.gsap.out, delay: 0.2 }
+          );
+        }
+
+        if (footer) {
+          gsap.fromTo(
+            footer,
+            { y: 12, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.55, ease: EASING.gsap.out, delay: 0.3 }
+          );
+        }
+
         return;
       }
 
-      gsap.to(menu, { opacity: 1, duration: 0.45, ease: EASING.gsap.out });
+      if (!hasAnimatedRef.current) return;
 
-      if (backdrop) {
-        gsap.fromTo(
-          backdrop,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.7, ease: EASING.gsap.out }
-        );
+      gsap.killTweensOf(targets);
+
+      if (reducedMotion) {
+        gsap.set(menu, { opacity: 0, pointerEvents: "none", visibility: "hidden" });
+        return;
       }
 
-      gsap.fromTo(
-        linkItems,
-        { y: 28, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.7,
-          stagger: 0.05,
-          ease: EASING.gsap.outStrong,
-          delay: 0.06,
-        }
-      );
+      gsap.to(menu, {
+        opacity: 0,
+        duration: 0.28,
+        ease: EASING.gsap.in,
+        onComplete: () =>
+          gsap.set(menu, { pointerEvents: "none", visibility: "hidden" }),
+      });
+    };
 
-      if (feature) {
-        gsap.fromTo(
-          feature,
-          { x: 24, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.7, ease: EASING.gsap.out, delay: 0.2 }
-        );
-      }
+    animate();
 
-      if (footer) {
-        gsap.fromTo(
-          footer,
-          { y: 12, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.55, ease: EASING.gsap.out, delay: 0.3 }
-        );
-      }
-
-      return;
-    }
-
-    if (!hasAnimatedRef.current) return;
-
-    gsap.killTweensOf([menu, backdrop, linksEl, linkItems, feature, footer]);
-
-    if (reducedMotion) {
-      gsap.set(menu, { opacity: 0, pointerEvents: "none", visibility: "hidden" });
-      return;
-    }
-
-    gsap.to(menu, {
-      opacity: 0,
-      duration: 0.28,
-      ease: EASING.gsap.in,
-      onComplete: () =>
-        gsap.set(menu, { pointerEvents: "none", visibility: "hidden" }),
-    });
+    // These tweens carry delays and onComplete callbacks that write to the DOM,
+    // so stop them if the nav unmounts mid-transition.
+    return () => gsap.killTweensOf(targets);
   }, [menuOpen, reducedMotion]);
 
   const closeMenu = () => setMenuOpen(false);

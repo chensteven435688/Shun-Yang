@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LinkHub } from "@/components/LinkHub";
 import { intricateHub } from "@/data/intricate-links";
+import { absoluteAssetUrl } from "@/lib/assetPath";
 import { siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
     description:
       "Listen to Intricate by Romantica on Spotify, Apple Music, YouTube, KKBOX, and more.",
     url: siteUrl("/music/intricate"),
-    images: ["/images/intricate-cover.png"],
+    images: [absoluteAssetUrl("/images/intricate-cover.png")],
   },
 };
 
