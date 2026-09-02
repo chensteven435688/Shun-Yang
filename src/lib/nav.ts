@@ -28,10 +28,11 @@ export const NAV_LINKS: NavLink[] = [
   { label: "Contact", href: "/contact/", index: "06", route: "/contact" },
 ];
 
-/** Visible in the desktop top bar — clean, minimal set */
-export const DESKTOP_NAV_LINKS = NAV_LINKS.filter((link) =>
-  ["About", "Music", "Live", "Contact"].includes(link.label)
-);
+/**
+ * Visible in the desktop top bar. The menu trigger is hidden at these widths,
+ * so every route needs an entry here to stay reachable from a subpage.
+ */
+export const DESKTOP_NAV_LINKS = NAV_LINKS;
 
 export function normalizePathname(path: string): string {
   const bare = path.replace(/\/$/, "") || "/";

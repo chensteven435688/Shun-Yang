@@ -1109,6 +1109,16 @@ html[data-reduced-motion="true"] .cursor-root {
     background-color 0.35s var(--ease-cinematic);
 }
 
+/*
+ * From 1024px the full link row (.nav-desktop-links) is visible, so the
+ * trigger is redundant. Below that it is the only navigation, so it stays.
+ */
+@media (min-width: 1024px) {
+  .nav-trigger {
+    display: none;
+  }
+}
+
 .nav-trigger.is-open {
   border-color: color-mix(in srgb, var(--color-lime) 45%, transparent);
   background: color-mix(in srgb, var(--color-olive-dark) 85%, transparent);

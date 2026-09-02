@@ -97,6 +97,17 @@ export function Nav() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
+  // The trigger is hidden from 1024px up, so a panel left open while the
+  // viewport grows (resize, tablet rotation) would have no button to dismiss it.
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const closeOnDesktop = (event: MediaQueryListEvent) => {
+      if (event.matches) setMenuOpen(false);
+    };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
+
   useEffect(() => {
     if (!isHomePath(pathname)) return;
 
