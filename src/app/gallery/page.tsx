@@ -3,17 +3,10 @@ import { Moments } from "@/components/Moments";
 import { absoluteAssetUrl } from "@/lib/assetPath";
 import { siteUrl } from "@/lib/site";
 
-/** Kept so old /moments/ links still resolve. Canonical lives at /gallery/. */
 export const metadata: Metadata = {
   title: "Gallery — Shun Yang",
   description:
     "Photo gallery — on stage, in studio, and everyday life from Shun Yang.",
-  alternates: {
-    canonical: siteUrl("/gallery"),
-  },
-  robots: {
-    index: false,
-  },
   openGraph: {
     title: "Gallery — Shun Yang",
     description:
@@ -23,6 +16,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function MomentsAliasPage() {
+export default function GalleryPage() {
   return <Moments standalone />;
 }

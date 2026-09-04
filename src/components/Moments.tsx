@@ -21,16 +21,26 @@ function MomentCard({ item }: { item: MomentItem }) {
       data-cursor={hasImage ? "view" : undefined}
       className="moment-card group"
     >
-      <div className="photo-frame moment-frame aspect-[4/5]">
+      <div
+        className={`photo-frame moment-frame ${hasImage ? "" : "aspect-[4/5]"}`}
+      >
         {hasImage && item.src ? (
           <ProgressiveImage
             src={item.src}
             alt={item.alt ?? item.label}
             width={item.width ?? 800}
             height={item.height ?? 1000}
-            aspectRatio={`${item.width ?? 4} / ${item.height ?? 5}`}
+            aspectRatio={
+              item.width && item.height
+                ? `${item.width} / ${item.height}`
+                : "4 / 5"
+            }
             sizes="(max-width: 768px) 90vw, 33vw"
+            srcSet={item.srcSet}
+            webpSrcSet={item.webpSrcSet}
+            placeholderSrc={item.placeholderSrc}
             className="moment-inner h-full w-full"
+            imgClassName="object-cover object-center"
             fallbackLabel="Photo unavailable"
           />
         ) : (
@@ -69,7 +79,7 @@ export function Moments({ standalone = false }: Props) {
           as={standalone ? "h1" : "h2"}
           index="04"
           eyebrow="Gallery"
-          title="Moments"
+          title="Gallery"
           description={
             hasPhotos
               ? "Selected frames from stage, studio, and everyday life."
@@ -78,7 +88,7 @@ export function Moments({ standalone = false }: Props) {
           align="split"
           action={
             !standalone ? (
-              <Link href="/moments/" data-cursor="view" className="section-text-link">
+              <Link href="/gallery/" data-cursor="view" className="section-text-link">
                 Open Archive →
               </Link>
             ) : undefined

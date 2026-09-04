@@ -42,7 +42,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: siteUrl("/moments"),
+      url: siteUrl("/gallery"),
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.85,

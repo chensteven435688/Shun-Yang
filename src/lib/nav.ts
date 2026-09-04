@@ -16,14 +16,14 @@ export type NavLink = {
   /** Homepage hash target without # */
   sectionId?: HomeSectionId;
   /** Separate app route (not a homepage hash) */
-  route?: "/about" | "/videos" | "/music" | "/moments" | "/live" | "/contact";
+  route?: "/about" | "/videos" | "/music" | "/gallery" | "/live" | "/contact";
 };
 
 export const NAV_LINKS: NavLink[] = [
   { label: "About", href: "/about/", index: "01", route: "/about" },
   { label: "Videos", href: "/videos/", index: "02", route: "/videos" },
   { label: "Music", href: "/music/", index: "03", route: "/music" },
-  { label: "Moments", href: "/moments/", index: "04", route: "/moments" },
+  { label: "Gallery", href: "/gallery/", index: "04", route: "/gallery" },
   { label: "Live", href: "/live/", index: "05", route: "/live" },
   { label: "Contact", href: "/contact/", index: "06", route: "/contact" },
 ];
