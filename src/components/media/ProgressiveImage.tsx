@@ -3,12 +3,13 @@
 import {
   useCallback,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
   type ImgHTMLAttributes,
 } from "react";
-import { assetPath } from "@/lib/assetPath";
+import { assetPath, assetSrcSet } from "@/lib/assetPath";
 
 type ProgressiveImageProps = {
   src: string;
@@ -40,15 +41,7 @@ function resolve(path: string) {
 
 function resolveSrcSet(srcSet?: string) {
   if (!srcSet) return undefined;
-  return srcSet
-    .split(",")
-    .map((part) => {
-      const trimmed = part.trim();
-      const space = trimmed.lastIndexOf(" ");
-      if (space === -1) return resolve(trimmed);
-      return `${resolve(trimmed.slice(0, space))} ${trimmed.slice(space + 1)}`;
-    })
-    .join(", ");
+  return assetSrcSet(srcSet);
 }
 
 export function ProgressiveImage({
@@ -103,15 +96,24 @@ export function ProgressiveImage({
       // decode may reject; naturalWidth check below is authoritative
     }
 
-    if (!el.complete || el.naturalWidth === 0) {
-      setStatus({ key: loadKey, state: "error" });
-      onError?.();
+    if (el.naturalWidth > 0) {
+      setStatus({ key: loadKey, state: "loaded" });
+      onLoad?.();
       return;
     }
 
-    setStatus({ key: loadKey, state: "loaded" });
-    onLoad?.();
+    if (el.complete) {
+      setStatus({ key: loadKey, state: "error" });
+      onError?.();
+    }
   }, [loadKey, onError, onLoad]);
+
+  useLayoutEffect(() => {
+    const el = imgRef.current;
+    if (el?.complete) {
+      void reveal();
+    }
+  }, [loadKey, reveal]);
 
   const ratioStyle: CSSProperties | undefined = aspectRatio
     ? {

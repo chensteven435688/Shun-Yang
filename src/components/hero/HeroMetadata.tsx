@@ -24,6 +24,9 @@ export function HeroMetadata() {
           height={lobbyPhoto.height}
           aspectRatio="4 / 5"
           sizes={lobbyPhoto.sizes ?? "(max-width: 768px) 42vw, 220px"}
+          srcSet={lobbyPhoto.srcSet}
+          webpSrcSet={lobbyPhoto.webpSrcSet}
+          placeholderSrc={lobbyPhoto.placeholderSrc}
           className="hero-portrait-image"
           imgClassName="object-cover object-[center_22%]"
           fallbackLabel="Portrait unavailable"

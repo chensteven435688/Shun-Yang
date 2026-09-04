@@ -1,4 +1,5 @@
 import {
+  atlastEmail,
   atlastSite,
   atlastSocials,
   contactEmail,
@@ -104,6 +105,15 @@ export function Contact({ standalone = false }: { standalone?: boolean }) {
               className="contact-email-text"
             >
               {contactEmail}
+            </a>
+            <a
+              href={`mailto:${atlastEmail}`}
+              data-cursor="link"
+              data-reveal-item
+              className="contact-email-backup"
+            >
+              <span className="contact-email-backup-label">ΛTLΛST</span>
+              {atlastEmail}
             </a>
             <a
               href={atlastSite}

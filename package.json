@@ -9,7 +9,8 @@
     "preview": "npm run build && npx serve@latest out",
     "lint": "eslint",
     "optimize:hero": "node scripts/optimize-hero.mjs",
-    "optimize:about-portrait": "node scripts/optimize-about-portrait.mjs"
+    "optimize:about-portrait": "node scripts/optimize-about-portrait.mjs",
+    "optimize:lobby": "node scripts/optimize-lobby.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",

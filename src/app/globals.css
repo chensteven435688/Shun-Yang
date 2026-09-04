@@ -2642,6 +2642,29 @@ html[data-reduced-motion="true"] .music-featured-copy--live {
   color: var(--color-lime);
 }
 
+.contact-email-backup {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.55rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--color-cream) 42%, transparent);
+  transition: color 0.3s ease;
+}
+
+.contact-email-backup:hover {
+  color: var(--color-lime);
+}
+
+.contact-email-backup-label {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-cream) 32%, transparent);
+}
+
 .contact-socials {
   display: grid;
   gap: 1.75rem;
@@ -2694,6 +2717,18 @@ html[data-reduced-motion="true"] .music-featured-copy--live {
 
 .contact-shell--light .contact-email-text:hover {
   color: var(--color-lime-dim);
+}
+
+.contact-shell--light .contact-email-backup {
+  color: var(--color-ink-faint);
+}
+
+.contact-shell--light .contact-email-backup:hover {
+  color: var(--color-lime-dim);
+}
+
+.contact-shell--light .contact-email-backup-label {
+  color: color-mix(in srgb, var(--color-ink) 38%, transparent);
 }
 
 .contact-shell--light .section-text-link {
@@ -3223,6 +3258,16 @@ html[data-page="lobby"] .cursor-root {
 
 .home-lobby-image {
   width: 100%;
+  background: var(--color-surface-muted);
+}
+
+.home-lobby-image .progressive-image-skeleton {
+  background: linear-gradient(
+    145deg,
+    var(--color-surface-muted) 0%,
+    #fff 48%,
+    var(--color-surface-muted) 100%
+  );
 }
 
 .home-lobby-title {

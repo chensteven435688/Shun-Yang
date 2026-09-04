@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ProgressiveImage } from "@/components/media/ProgressiveImage";
 import { lobbyPhoto } from "@/data/gallery";
 import { LOBBY_LINKS } from "@/lib/lobbyNav";
+import { lobbyImage } from "@/lib/criticalAssets";
 import { atlastSite, personalSocials } from "@/data/socials";
 
 export function HomeLobby() {
@@ -24,7 +25,11 @@ export function HomeLobby() {
           width={lobbyPhoto.width}
           height={lobbyPhoto.height}
           aspectRatio="1 / 1"
-          sizes="(max-width: 768px) 88vw, 520px"
+          sizes={lobbyImage.sizes}
+          srcSet={lobbyPhoto.srcSet}
+          webpSrcSet={lobbyPhoto.webpSrcSet}
+          placeholderSrc={lobbyPhoto.placeholderSrc}
+          priority
           className="home-lobby-image"
           imgClassName="object-cover object-center"
           fallbackLabel="Image unavailable"

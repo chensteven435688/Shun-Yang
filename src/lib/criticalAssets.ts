@@ -38,6 +38,24 @@ export const aboutPortrait = {
   ).join(", "),
 } as const;
 
+export const LOBBY_WIDTHS = [640, 1024] as const;
+
+/** Square lobby still — homepage LCP and hero metadata portrait. */
+export const lobbyImage = {
+  placeholder: "/images/lobby/lobby-placeholder.jpg",
+  src: "/images/lobby/lobby-1024.jpg",
+  webpSrc: "/images/lobby/lobby-1024.webp",
+  width: 1024,
+  height: 1024,
+  sizes: "(max-width: 768px) 88vw, 520px",
+  srcSetJpg: LOBBY_WIDTHS.map((w) => `/images/lobby/lobby-${w}.jpg ${w}w`).join(
+    ", "
+  ),
+  srcSetWebp: LOBBY_WIDTHS.map(
+    (w) => `/images/lobby/lobby-${w}.webp ${w}w`
+  ).join(", "),
+} as const;
+
 export type CriticalAsset = {
   id: string;
   /** Root-relative path (will be passed through assetPath) */
@@ -45,22 +63,12 @@ export type CriticalAsset = {
   weight: number;
 };
 
-/** Assets that meaningfully gate the hero experience. */
+/** Assets that meaningfully gate the first homepage paint. */
 export function getCriticalAssets(): CriticalAsset[] {
   return [
     {
-      id: "hero-primary",
-      src: "/images/hero/hero-1920.webp",
-      weight: 3,
-    },
-    {
-      id: "hero-fallback",
-      src: "/images/hero/hero-1920.jpg",
-      weight: 2,
-    },
-    {
-      id: "intricate-cover",
-      src: "/images/intricate-cover.png",
+      id: "lobby-primary",
+      src: lobbyImage.webpSrc,
       weight: 1,
     },
   ];

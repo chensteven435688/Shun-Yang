@@ -41,5 +41,6 @@ export const atlastSocials: SocialLink[] = [
   },
 ];
 
-export const contactEmail = "info@atlastofficial.com";
+export const contactEmail = "shunyangofficial@gmail.com";
+export const atlastEmail = "info@atlastofficial.com";
 export const atlastSite = "https://atlastofficial.com";
