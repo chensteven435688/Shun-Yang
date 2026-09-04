@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ProgressiveImage } from "@/components/media/ProgressiveImage";
 import {
@@ -22,7 +23,12 @@ function MomentCard({ item }: { item: MomentItem }) {
       className="moment-card group"
     >
       <div
-        className={`photo-frame moment-frame ${hasImage ? "" : "aspect-[4/5]"}`}
+        className="photo-frame moment-frame"
+        style={
+          {
+            "--moment-object-position": item.objectPosition ?? "center",
+          } as CSSProperties
+        }
       >
         {hasImage && item.src ? (
           <ProgressiveImage
@@ -30,17 +36,13 @@ function MomentCard({ item }: { item: MomentItem }) {
             alt={item.alt ?? item.label}
             width={item.width ?? 800}
             height={item.height ?? 1000}
-            aspectRatio={
-              item.width && item.height
-                ? `${item.width} / ${item.height}`
-                : "4 / 5"
-            }
+            aspectRatio="4 / 5"
             sizes="(max-width: 768px) 90vw, 33vw"
             srcSet={item.srcSet}
             webpSrcSet={item.webpSrcSet}
             placeholderSrc={item.placeholderSrc}
             className="moment-inner h-full w-full"
-            imgClassName="object-cover object-center"
+            imgClassName="object-cover"
             fallbackLabel="Photo unavailable"
           />
         ) : (

@@ -23,6 +23,8 @@ export type MomentItem = {
   location?: string;
   featured?: boolean;
   credit?: string;
+  /** CSS object-position for the 4:5 crop */
+  objectPosition?: string;
 };
 
 /**
@@ -57,6 +59,7 @@ export const moments: MomentItem[] = [
     alt: "Shun Yang singing live with ΛTLΛST, 2025",
     date: "2025",
     featured: true,
+    objectPosition: "center 42%",
   },
   {
     id: "in-studio",
@@ -64,14 +67,15 @@ export const moments: MomentItem[] = [
     label: "Live 2024",
     caption: "LIVE 2024",
     src: "/images/moments/live-2024.jpg",
-    srcSet: "/images/moments/live-2024.jpg 1706w",
-    webpSrcSet: "/images/moments/live-2024.webp 1706w",
+    srcSet: "/images/moments/live-2024.jpg 4608w",
+    webpSrcSet: "/images/moments/live-2024.webp 4608w",
     placeholderSrc: "/images/moments/live-2024-placeholder.jpg",
-    width: 1706,
-    height: 1365,
-    alt: "Shun Yang on stage with a microphone, 2024",
+    width: 4608,
+    height: 3072,
+    alt: "Shun Yang and friends posing on stage with the audience after a live show, 2024",
     date: "2024",
     featured: true,
+    objectPosition: "center",
   },
   {
     id: "behind-the-scenes",
@@ -87,6 +91,7 @@ export const moments: MomentItem[] = [
     alt: "Shun Yang in a phone booth, behind the scenes, 2025",
     date: "2025",
     featured: true,
+    objectPosition: "center 40%",
   },
   {
     id: "travel",
@@ -101,6 +106,7 @@ export const moments: MomentItem[] = [
     height: 2096,
     alt: "Shun Yang at home holding a container of blueberries",
     featured: true,
+    objectPosition: "center 22%",
   },
   {
     id: "portraits",
@@ -115,6 +121,7 @@ export const moments: MomentItem[] = [
     height: 6000,
     alt: "Studio portrait of Shun Yang seated, looking toward the camera",
     featured: true,
+    objectPosition: "center 28%",
   },
   {
     id: "everyday",
@@ -129,6 +136,7 @@ export const moments: MomentItem[] = [
     height: 3088,
     alt: "Shun Yang on a city street, daily life",
     featured: true,
+    objectPosition: "center 20%",
   },
 ];
 
