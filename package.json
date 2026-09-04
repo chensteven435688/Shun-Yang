@@ -8,7 +8,8 @@
     "start": "npx serve@latest out",
     "preview": "npm run build && npx serve@latest out",
     "lint": "eslint",
-    "optimize:hero": "node scripts/optimize-hero.mjs"
+    "optimize:hero": "node scripts/optimize-hero.mjs",
+    "optimize:about-portrait": "node scripts/optimize-about-portrait.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",

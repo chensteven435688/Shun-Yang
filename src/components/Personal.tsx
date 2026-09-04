@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ProgressiveImage } from "@/components/media/ProgressiveImage";
-import { heroImage } from "@/lib/criticalAssets";
+import { aboutPortrait } from "@/lib/criticalAssets";
 
 type Props = {
   standalone?: boolean;
@@ -93,15 +93,15 @@ export function Personal({ standalone = false }: Props) {
 
           <figure data-reveal="media" className="about-portrait">
             <ProgressiveImage
-              src={heroImage.src}
+              src={aboutPortrait.src}
               alt="Shun Yang in Taipei, 2025"
-              width={480}
-              height={600}
+              width={aboutPortrait.width}
+              height={aboutPortrait.height}
               aspectRatio="4 / 5"
-              sizes="(max-width: 1024px) 40vw, 220px"
-              srcSet={heroImage.srcSetJpg}
-              webpSrcSet={heroImage.srcSetWebp}
-              placeholderSrc={heroImage.placeholder}
+              sizes={aboutPortrait.sizes}
+              srcSet={aboutPortrait.srcSetJpg}
+              webpSrcSet={aboutPortrait.srcSetWebp}
+              placeholderSrc={aboutPortrait.placeholder}
               className="about-portrait-image"
               imgClassName="object-cover object-center"
               fallbackLabel="Portrait unavailable"

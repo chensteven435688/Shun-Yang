@@ -21,6 +21,23 @@ export const heroImage = {
   ).join(", "),
 } as const;
 
+/** Dedicated 4:5 crop for the About portrait — not the landscape hero srcset. */
+export const ABOUT_PORTRAIT_WIDTHS = [480, 960, 1440] as const;
+
+export const aboutPortrait = {
+  placeholder: "/images/about/portrait-placeholder.jpg",
+  src: "/images/about/portrait-960.jpg",
+  width: 960,
+  height: 1200,
+  sizes: "(max-width: 1024px) min(45vw, 320px), 220px",
+  srcSetJpg: ABOUT_PORTRAIT_WIDTHS.map(
+    (w) => `/images/about/portrait-${w}.jpg ${w}w`
+  ).join(", "),
+  srcSetWebp: ABOUT_PORTRAIT_WIDTHS.map(
+    (w) => `/images/about/portrait-${w}.webp ${w}w`
+  ).join(", "),
+} as const;
+
 export type CriticalAsset = {
   id: string;
   /** Root-relative path (will be passed through assetPath) */
