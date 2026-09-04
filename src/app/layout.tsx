@@ -11,7 +11,7 @@ import { SectionProgress } from "@/components/navigation/SectionProgress";
 import { RouteFade } from "@/components/transitions/RouteFade";
 import { MagneticController } from "@/components/effects/MagneticController";
 import { bootScript } from "@/lib/bootScript";
-import { absoluteAssetUrl } from "@/lib/assetPath";
+import { absoluteAssetUrl, assetPath } from "@/lib/assetPath";
 import { siteOrigin, siteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -32,6 +32,22 @@ export const metadata: Metadata = {
   title: "Shun Yang — Vocalist, Lyricist & Creator",
   description:
     "Personal portfolio of Shun Yang (陳舜揚) — vocalist and lyricist of ΛTLΛST. Music, moments, and everything in between.",
+  icons: {
+    icon: [
+      {
+        url: "/images/brand/favicon-v2.png",
+        type: "image/png",
+        sizes: "32x32",
+      },
+      {
+        url: "/images/brand/favicon-v2-192.png",
+        type: "image/png",
+        sizes: "192x192",
+      },
+    ],
+    shortcut: "/images/brand/favicon-v2.png",
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   openGraph: {
     type: "website",
     url: siteUrl(),
@@ -68,6 +84,19 @@ export default function RootLayout({
       className={`${libre.variable} ${dmSans.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <link
+          rel="icon"
+          href={assetPath("/images/brand/favicon-v2.png")}
+          type="image/png"
+          sizes="32x32"
+        />
+        <link
+          rel="apple-touch-icon"
+          href={assetPath("/apple-icon.png")}
+          sizes="180x180"
+        />
+      </head>
       <body>
         <Script id="sy-boot" strategy="beforeInteractive">
           {bootScript}
